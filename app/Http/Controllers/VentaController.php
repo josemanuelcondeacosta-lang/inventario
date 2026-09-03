@@ -7,6 +7,7 @@ use App\Models\Producto;
 use App\Models\Venta;
 use App\Models\VentaDetalle;
 use App\Models\CompraDetalle;
+use App\Models\Abono;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -23,6 +24,8 @@ class VentaController extends Controller
                     ->orWhere('nombre', 'like', '%' . $request->buscar . '%');
                 });
             })
+            ->when($request->estado === 'pendientes', fn($q) => $q->where('saldo', '>', 0))
+            ->when($request->estado === 'por_entregar', fn($q) => $q->where('entregado', false))
             ->orderByDesc('fecha')
             ->orderByDesc('id')
             ->paginate(15)
@@ -45,6 +48,10 @@ class VentaController extends Controller
     {
         $datos = $request->validate([
             'fecha'                     => 'required|date',
+            'tipo_pago'                 => 'required|in:contado,fiado,separado',
+            'metodo_pago'               => 'required|in:efectivo,transferencia,mixto',
+            'abono_inicial'             => 'nullable|numeric|min:0',
+            'nota'                      => 'nullable|string|max:500',
             'cedula'                    => 'nullable|string|max:20',
             'nombre_cliente'            => 'nullable|string|max:150',
             'telefono'                  => 'nullable|string|max:20',
@@ -54,6 +61,12 @@ class VentaController extends Controller
             'detalles.*.precio_venta'   => 'required|numeric|min:0',
             'detalles.*.garantia_meses' => 'nullable|integer|min:0',
         ]);
+
+        if ($datos['tipo_pago'] !== 'contado' && empty($datos['cedula'])) {
+            throw ValidationException::withMessages([
+                'cedula' => 'Para ventas fiadas o separadas debe registrar la cédula del cliente.',
+            ]);
+        }
 
         DB::transaction(function () use ($datos) {
 
@@ -71,9 +84,15 @@ class VentaController extends Controller
             }
 
             $venta = Venta::create([
-                'cliente_id' => $clienteId,
-                'fecha'      => $datos['fecha'],
-                'total'      => 0,
+                'cliente_id'  => $clienteId,
+                'fecha'       => $datos['fecha'],
+                'tipo_pago'   => $datos['tipo_pago'],
+                'metodo_pago' => $datos['metodo_pago'],
+                'total'       => 0,
+                'abonado'     => 0,
+                'saldo'       => 0,
+                'entregado'   => $datos['tipo_pago'] !== 'separado',
+                'nota'        => $datos['nota'] ?? null,
             ]);
 
             $total = 0;
@@ -105,16 +124,36 @@ class VentaController extends Controller
                 $total += $subtotal;
             }
 
-            $venta->update(['total' => $total]);
+            if ($datos['tipo_pago'] === 'contado') {
+                $abonado = $total;
+            } else {
+                $abonado = min($datos['abono_inicial'] ?? 0, $total);
+            }
+
+            $venta->update([
+                'total'   => $total,
+                'abonado' => $abonado,
+                'saldo'   => $total - $abonado,
+            ]);
+
+            if ($abonado > 0) {
+                Abono::create([
+                    'venta_id'    => $venta->id,
+                    'fecha'       => $datos['fecha'],
+                    'monto'       => $abonado,
+                    'metodo_pago' => $datos['metodo_pago'] === 'mixto' ? 'efectivo' : $datos['metodo_pago'],
+                    'nota'        => $datos['tipo_pago'] === 'contado' ? 'Pago completo' : 'Abono inicial',
+                ]);
+            }
         });
 
         return redirect()->route('ventas.index')
-            ->with('success', 'Venta registrada y stock descontado.');
+            ->with('success', 'Venta registrada correctamente.');
     }
 
     public function show(Venta $venta)
     {
-        $venta->load('detalles.producto', 'cliente');
+        $venta->load('detalles.producto', 'cliente', 'abonos');
 
         $productoIds = $venta->detalles->pluck('producto_id');
 
@@ -149,5 +188,44 @@ class VentaController extends Controller
             'nombre'     => $cliente->nombre,
             'telefono'   => $cliente->telefono,
         ]);
+    }
+
+    public function registrarAbono(Request $request, Venta $venta)
+    {
+        $datos = $request->validate([
+            'monto'       => 'required|numeric|min:1|max:' . $venta->saldo,
+            'fecha'       => 'required|date',
+            'metodo_pago' => 'required|in:efectivo,transferencia',
+            'nota'        => 'nullable|string|max:200',
+        ], [
+            'monto.max' => 'El abono no puede superar el saldo pendiente de $' . number_format($venta->saldo, 0),
+        ]);
+
+        DB::transaction(function () use ($datos, $venta) {
+
+            Abono::create([
+                'venta_id'    => $venta->id,
+                'fecha'       => $datos['fecha'],
+                'monto'       => $datos['monto'],
+                'metodo_pago' => $datos['metodo_pago'],
+                'nota'        => $datos['nota'] ?? null,
+            ]);
+
+            $venta->increment('abonado', $datos['monto']);
+            $venta->decrement('saldo', $datos['monto']);
+        });
+
+        return back()->with('success', 'Abono registrado correctamente.');
+    }
+
+    public function marcarEntregado(Venta $venta)
+    {
+        if ($venta->saldo > 0) {
+            return back()->with('error', 'No se puede entregar: aún tiene saldo pendiente de $' . number_format($venta->saldo, 0));
+        }
+
+        $venta->update(['entregado' => true]);
+
+        return back()->with('success', 'Producto marcado como entregado.');
     }
 }

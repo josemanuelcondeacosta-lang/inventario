@@ -35,6 +35,8 @@ Route::middleware('auth')->group(function () {
     Route::post('ventas', [VentaController::class, 'store'])->name('ventas.store');
     Route::get('ventas/buscar-cliente', [VentaController::class, 'buscarCliente'])->name('ventas.buscarCliente');
     Route::get('ventas/{venta}/factura', [VentaController::class, 'factura'])->name('ventas.factura');
+    Route::post('ventas/{venta}/abono', [VentaController::class, 'registrarAbono'])->name('ventas.abono');
+    Route::post('ventas/{venta}/entregar', [VentaController::class, 'marcarEntregado'])->name('ventas.entregar');
     Route::get('ventas/{venta}', [VentaController::class, 'show'])->name('ventas.show');
 
     Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');

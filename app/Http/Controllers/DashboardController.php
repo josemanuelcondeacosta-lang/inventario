@@ -52,9 +52,23 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
+        
+        $porCobrar = Venta::with('cliente')
+        ->where('saldo', '>', 0)
+        ->orderBy('fecha')
+        ->get();
+
+        $totalPorCobrar = $porCobrar->sum('saldo');
+
+        $porEntregar = Venta::with('cliente')
+            ->where('entregado', false)
+            ->orderBy('fecha')
+            ->get();
+
         return view('dashboard', compact(
             'ventasMes', 'gananciaMes', 'unidadesMes', 'valorInventario',
-            'stockBajo', 'masVendidos', 'ultimasVentas'
+            'stockBajo', 'masVendidos', 'ultimasVentas',
+            'porCobrar', 'totalPorCobrar', 'porEntregar'
         ));
     }
 }

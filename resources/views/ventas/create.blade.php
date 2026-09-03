@@ -19,16 +19,58 @@
             <form action="{{ route('ventas.store') }}" method="POST">
                 @csrf
 
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    <div>
+                        <label class="block mb-1 font-medium text-sm">Fecha</label>
+                        <input type="date" name="fecha" value="{{ old('fecha', date('Y-m-d')) }}"
+                               max="{{ date('Y-m-d') }}"
+                               class="w-full border-gray-300 rounded text-sm" required>
+                    </div>
+
+                    <div>
+                        <label class="block mb-1 font-medium text-sm">Tipo de pago</label>
+                        <select name="tipo_pago" id="tipo_pago" class="w-full border-gray-300 rounded text-sm" required>
+                            <option value="contado" {{ old('tipo_pago') == 'contado' ? 'selected' : '' }}>
+                                Contado (pago completo)
+                            </option>
+                            <option value="fiado" {{ old('tipo_pago') == 'fiado' ? 'selected' : '' }}>
+                                Fiado (se lleva, paga después)
+                            </option>
+                            <option value="separado" {{ old('tipo_pago') == 'separado' ? 'selected' : '' }}>
+                                Separado (se aparta, paga por cuotas)
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block mb-1 font-medium text-sm">Método de pago</label>
+                        <select name="metodo_pago" class="w-full border-gray-300 rounded text-sm" required>
+                            <option value="efectivo" {{ old('metodo_pago') == 'efectivo' ? 'selected' : '' }}>Efectivo</option>
+                            <option value="transferencia" {{ old('metodo_pago') == 'transferencia' ? 'selected' : '' }}>Transferencia</option>
+                            <option value="mixto" {{ old('metodo_pago') == 'mixto' ? 'selected' : '' }}>Mixto</option>
+                        </select>
+                    </div>
+
+                    <div id="cajaAbono" class="hidden">
+                        <label class="block mb-1 font-medium text-sm">Abono inicial</label>
+                        <input type="number" name="abono_inicial" min="0" step="1"
+                               value="{{ old('abono_inicial', 0) }}"
+                               class="w-full border-gray-300 rounded text-sm text-right">
+                        <p class="text-xs text-gray-500 mt-1">Deje 0 si no abonó nada.</p>
+                    </div>
+                </div>
+
                 <div class="mb-4">
-                    <label class="block mb-1 font-medium">Fecha</label>
-                    <input type="date" name="fecha" value="{{ old('fecha', date('Y-m-d')) }}"
-                           class="border-gray-300 rounded" required>
+                    <label class="block mb-1 font-medium text-sm">Nota (opcional)</label>
+                    <input type="text" name="nota" value="{{ old('nota') }}"
+                           placeholder="Ej: promete pagar el viernes"
+                           class="w-full border-gray-300 rounded text-sm">
                 </div>
 
                 <div class="border rounded p-4 mb-6 bg-gray-50">
                     <h3 class="font-semibold mb-3 text-sm">
                         Datos del cliente
-                        <span class="font-normal text-gray-500">(opcional — para garantías)</span>
+                        <span class="font-normal text-gray-500">(para garantías y cobros)</span>
                     </h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -213,11 +255,32 @@
             }
         });
 
+        // Mostrar abono inicial solo en fiado y separado
+        const tipoPago = document.getElementById('tipo_pago');
+        const cajaAbono = document.getElementById('cajaAbono');
+        const inputCedula = document.getElementById('cedula');
+
+        const avisoCedula = document.createElement('p');
+        avisoCedula.className = 'text-xs text-orange-700 mt-1';
+        avisoCedula.textContent = 'Obligatorio para fiados y separados';
+
+        function actualizarTipoPago() {
+            if (tipoPago.value === 'contado') {
+                cajaAbono.classList.add('hidden');
+                avisoCedula.remove();
+            } else {
+                cajaAbono.classList.remove('hidden');
+                inputCedula.parentElement.appendChild(avisoCedula);
+            }
+        }
+
+        tipoPago.addEventListener('change', actualizarTipoPago);
+        actualizarTipoPago();
+
         // Autocompletar cliente por cédula
-        const cedula = document.getElementById('cedula');
         let timer;
 
-        cedula.addEventListener('input', function () {
+        inputCedula.addEventListener('input', function () {
             clearTimeout(timer);
             const valor = this.value.trim();
             const aviso = document.getElementById('avisoCliente');

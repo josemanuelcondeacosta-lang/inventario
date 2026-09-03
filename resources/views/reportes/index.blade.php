@@ -92,6 +92,18 @@
                         </tr>
                     @endforelse
                 </tbody>
+                 @if ($porProducto->count())
+                    <tfoot>
+                        <tr class="border-t font-semibold bg-gray-50">
+                            <td colspan="2" class="p-2 text-right">Totales</td>
+                            <td class="p-2 text-center">{{ $porProducto->sum('unidades') }}</td>
+                            <td class="p-2 text-right">${{ number_format($porProducto->sum('ingresos'), 0) }}</td>
+                            <td class="p-2 text-right text-green-700">
+                                ${{ number_format($porProducto->sum('ganancia'), 0) }}
+                            </td>
+                        </tr>
+                    </tfoot>
+                @endif
             </table>
         </div>
 
@@ -133,6 +145,8 @@
                     @endforeach
                 </tbody>
                 <tfoot>
+                    
+
                     <tr class="border-t font-semibold">
                         <td colspan="4" class="p-2 text-right">Valor total del inventario</td>
                         <td class="p-2 text-right">
