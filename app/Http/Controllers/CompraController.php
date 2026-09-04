@@ -81,4 +81,44 @@ class CompraController extends Controller
         $compra->load('detalles.producto');
         return view('compras.show', compact('compra'));
     }
+
+    public function anular(Request $request, Compra $compra)
+    {
+        $datos = $request->validate([
+            'motivo' => 'required|string|max:200',
+        ]);
+
+        if ($compra->anulada) {
+            return redirect()->route('compras.show', $compra)
+                ->with('error', 'Esta compra ya fue anulada.');
+        }
+
+        $compra->load('detalles.producto');
+
+        foreach ($compra->detalles as $detalle) {
+            if ($detalle->producto->stock < $detalle->cantidad) {
+                return redirect()->route('compras.show', $compra)
+                    ->with('error',
+                        "No se puede anular: el stock de {$detalle->producto->nombre} " .
+                        "ya bajó de {$detalle->cantidad} unidades (quedan {$detalle->producto->stock}). " .
+                        "Probablemente ya se vendieron.");
+            }
+        }
+
+        DB::transaction(function () use ($compra, $datos) {
+            foreach ($compra->detalles as $detalle) {
+                Producto::where('id', $detalle->producto_id)
+                    ->decrement('stock', $detalle->cantidad);
+            }
+
+            $compra->update([
+                'anulada'          => true,
+                'anulada_at'       => now(),
+                'motivo_anulacion' => $datos['motivo'],
+            ]);
+        });
+
+        return redirect()->route('compras.index')
+            ->with('success', 'Compra anulada y stock revertido.');
+    }
 }

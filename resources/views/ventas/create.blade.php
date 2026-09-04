@@ -16,7 +16,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('ventas.store') }}" method="POST">
+            <form action="{{ route('ventas.store') }}" method="POST" id="formVenta">
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
@@ -303,6 +303,12 @@
                         }
                     });
             }, 400);
+        });
+
+        document.getElementById('formVenta').addEventListener('submit', function () {
+            const btn = this.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = 'Guardando...';
         });
 
         agregarFila();

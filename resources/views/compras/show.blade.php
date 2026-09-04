@@ -4,6 +4,10 @@
     </x-slot>
 
     <div class="py-6 max-w-4xl mx-auto sm:px-6 lg:px-8">
+
+            @if (session('error'))
+                <div class="mb-4 p-4 bg-red-100 text-red-800 rounded">{{ session('error') }}</div>
+            @endif
         <div class="bg-white shadow rounded p-6">
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 text-sm">
@@ -56,6 +60,45 @@
                     </tr>
                 </tfoot>
             </table>
+
+                        @if ($compra->anulada)
+                <div class="mt-6 p-4 bg-gray-100 rounded border-l-4 border-gray-500">
+                    <p class="font-semibold text-gray-700">Compra anulada</p>
+                    <p class="text-sm text-gray-600 mt-1">
+                        Fecha: {{ $compra->anulada_at->format('d/m/Y H:i') }}<br>
+                        Motivo: {{ $compra->motivo_anulacion }}
+                    </p>
+                </div>
+            @else
+                <div class="mt-6 border-t pt-4">
+                    <details>
+                        <summary class="cursor-pointer text-sm text-red-600 hover:underline">
+                            Anular esta compra
+                        </summary>
+
+                        <div class="mt-3 p-4 bg-red-50 rounded">
+                            <p class="text-sm text-gray-700 mb-3">
+                                Al anular, el stock de estos productos se descontará del inventario.
+                                La compra quedará registrada como anulada.
+                            </p>
+
+                            <form action="{{ route('compras.anular', $compra) }}" method="POST"
+                                  onsubmit="return confirm('¿Seguro que desea anular esta compra?')">
+                                @csrf
+                                <label class="block mb-1 text-sm font-medium">Motivo de la anulación</label>
+                                <input type="text" name="motivo" required maxlength="200"
+                                       placeholder="Ej: se registró la cantidad equivocada"
+                                       class="w-full border-gray-300 rounded text-sm mb-3">
+
+                                <button type="submit"
+                                        class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm">
+                                    Confirmar anulación
+                                </button>
+                            </form>
+                        </div>
+                    </details>
+                </div>
+            @endif
 
             <div class="mt-6">
                 <a href="{{ route('compras.index') }}"

@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('compras/create', [CompraController::class, 'create'])->name('compras.create');
     Route::post('compras', [CompraController::class, 'store'])->name('compras.store');
     Route::get('compras/{compra}', [CompraController::class, 'show'])->name('compras.show');
+    Route::post('compras/{compra}/anular', [CompraController::class, 'anular'])->name('compras.anular');
 
     Route::get('ventas', [VentaController::class, 'index'])->name('ventas.index');
     Route::get('ventas/create', [VentaController::class, 'create'])->name('ventas.create');
@@ -37,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::get('ventas/{venta}/factura', [VentaController::class, 'factura'])->name('ventas.factura');
     Route::post('ventas/{venta}/abono', [VentaController::class, 'registrarAbono'])->name('ventas.abono');
     Route::post('ventas/{venta}/entregar', [VentaController::class, 'marcarEntregado'])->name('ventas.entregar');
+    Route::post('ventas/{venta}/anular', [VentaController::class, 'anular'])->name('ventas.anular');
     Route::get('ventas/{venta}', [VentaController::class, 'show'])->name('ventas.show');
 
     Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');

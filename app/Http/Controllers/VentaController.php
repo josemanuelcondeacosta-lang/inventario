@@ -228,4 +228,34 @@ class VentaController extends Controller
 
         return back()->with('success', 'Producto marcado como entregado.');
     }
+
+    public function anular(Request $request, Venta $venta)
+    {
+        $datos = $request->validate([
+            'motivo' => 'required|string|max:200',
+        ]);
+
+        if ($venta->anulada) {
+            return back()->with('error', 'Esta venta ya fue anulada.');
+        }
+
+        $venta->load('detalles');
+
+        DB::transaction(function () use ($venta, $datos) {
+            foreach ($venta->detalles as $detalle) {
+                Producto::where('id', $detalle->producto_id)
+                    ->increment('stock', $detalle->cantidad);
+            }
+
+            $venta->update([
+                'anulada'          => true,
+                'anulada_at'       => now(),
+                'motivo_anulacion' => $datos['motivo'],
+                'saldo'            => 0,
+            ]);
+        });
+
+        return redirect()->route('ventas.index')
+            ->with('success', 'Venta anulada y stock devuelto al inventario.');
+    }
 }

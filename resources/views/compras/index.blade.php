@@ -11,6 +11,12 @@
             </div>
         @endif
 
+        @if (session('error'))
+            <div class="mb-4 p-4 bg-red-100 text-red-800 rounded">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="mb-4">
             <a href="{{ route('compras.create') }}"
                class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
@@ -25,6 +31,7 @@
                         <th class="p-3">Fecha</th>
                         <th class="p-3">Proveedor</th>
                         <th class="p-3">Factura</th>
+                        <th class="p-3">Estado</th>
                         <th class="p-3 text-center">Productos</th>
                         <th class="p-3 text-right">Total</th>
                         <th class="p-3 text-right">Acciones</th>
@@ -32,20 +39,27 @@
                 </thead>
                 <tbody>
                     @forelse ($compras as $compra)
-                        <tr class="border-t">
+                        <tr class="border-t {{ $compra->anulada ? 'opacity-50' : '' }}">
                             <td class="p-3">{{ $compra->fecha->format('d/m/Y') }}</td>
                             <td class="p-3">{{ $compra->proveedor ?? '-' }}</td>
                             <td class="p-3">{{ $compra->factura ?? '-' }}</td>
+                            <td class="p-3">
+                                @if ($compra->anulada)
+                                    <span class="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs">Anulada</span>
+                                @else
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded text-xs">Activa</span>
+                                @endif
+                            </td>
                             <td class="p-3 text-center">{{ $compra->detalles_count }}</td>
                             <td class="p-3 text-right">${{ number_format($compra->total, 0) }}</td>
                             <td class="p-3 text-right">
                                 <a href="{{ route('compras.show', $compra) }}"
-                                   class="text-blue-600 hover:underline">Ver detalle</a>
+                                class="text-blue-600 hover:underline">Ver detalle</a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="p-4 text-center text-gray-500">
+                            <td colspan="7" class="p-4 text-center text-gray-500">
                                 No hay compras registradas.
                             </td>
                         </tr>

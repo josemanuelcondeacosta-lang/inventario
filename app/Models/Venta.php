@@ -8,12 +8,15 @@ class Venta extends Model
 {
     protected $fillable = [
         'cliente_id', 'fecha', 'tipo_pago', 'metodo_pago',
-        'total', 'abonado', 'saldo', 'entregado', 'nota'
+        'total', 'abonado', 'saldo', 'entregado', 'nota',
+        'anulada', 'anulada_at', 'motivo_anulacion'
     ];
 
     protected $casts = [
-        'fecha'     => 'date',
-        'entregado' => 'boolean',
+        'fecha'      => 'date',
+        'entregado'  => 'boolean',
+        'anulada'    => 'boolean',
+        'anulada_at' => 'datetime',
     ];
 
     public function cliente()
@@ -38,6 +41,7 @@ class Venta extends Model
 
     public function estadoTexto()
     {
+        if ($this->anulada) return 'Anulada';
         if ($this->saldo > 0 && !$this->entregado) return 'Separado';
         if ($this->saldo > 0) return 'Debe';
         if (!$this->entregado) return 'Por entregar';

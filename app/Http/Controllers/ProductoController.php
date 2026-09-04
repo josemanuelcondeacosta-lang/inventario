@@ -12,7 +12,8 @@ class ProductoController extends Controller
     {
         $productos = Producto::with('categoria')
             ->when($request->buscar, function ($q) use ($request) {
-                $q->where('nombre', 'like', '%' . $request->buscar . '%');
+                $q->where('nombre', 'like', '%' . $request->buscar . '%')
+                ->orWhere('referencia', 'like', '%' . $request->buscar . '%');
             })
             ->orderBy('nombre')
             ->paginate(15)
@@ -71,6 +72,7 @@ class ProductoController extends Controller
             'precio_compra' => 'required|numeric|min:0',
             'precio_venta'  => 'required|numeric|min:0|gte:precio_compra',
             'stock_minimo'  => 'required|integer|min:0',
+            'referencia' => 'nullable|string|max:50|unique:productos,referencia,' . ($request->route('producto')?->id ?? 'NULL'),
         ]);
     }
 }
