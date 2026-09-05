@@ -1,35 +1,35 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">Registrar venta</h2>
+        <h2 class="text-lg font-semibold text-slate-800">Registrar venta</h2>
     </x-slot>
 
-    <div class="py-6 max-w-5xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white shadow rounded p-6">
+    <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
+        <div class="card card-body">
 
             @if ($errors->any())
-                <div class="mb-4 p-4 bg-red-100 text-red-800 rounded">
-                    <ul class="list-disc list-inside text-sm">
+                <x-alert variant="error" class="mb-4">
+                    <ul class="list-inside list-disc space-y-0.5">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
                     </ul>
-                </div>
+                </x-alert>
             @endif
 
             <form action="{{ route('ventas.store') }}" method="POST" id="formVenta">
                 @csrf
 
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-4">
                     <div>
-                        <label class="block mb-1 font-medium text-sm">Fecha</label>
-                        <input type="date" name="fecha" value="{{ old('fecha', date('Y-m-d')) }}"
+                        <label for="fecha" class="field-label">Fecha</label>
+                        <input type="date" id="fecha" name="fecha" value="{{ old('fecha', date('Y-m-d')) }}"
                                max="{{ date('Y-m-d') }}"
-                               class="w-full border-gray-300 rounded text-sm" required>
+                               class="field-input" required>
                     </div>
 
                     <div>
-                        <label class="block mb-1 font-medium text-sm">Tipo de pago</label>
-                        <select name="tipo_pago" id="tipo_pago" class="w-full border-gray-300 rounded text-sm" required>
+                        <label for="tipo_pago" class="field-label">Tipo de pago</label>
+                        <select name="tipo_pago" id="tipo_pago" class="field-input" required>
                             <option value="contado" {{ old('tipo_pago') == 'contado' ? 'selected' : '' }}>
                                 Contado (pago completo)
                             </option>
@@ -43,8 +43,8 @@
                     </div>
 
                     <div>
-                        <label class="block mb-1 font-medium text-sm">Método de pago</label>
-                        <select name="metodo_pago" class="w-full border-gray-300 rounded text-sm" required>
+                        <label for="metodo_pago" class="field-label">Método de pago</label>
+                        <select id="metodo_pago" name="metodo_pago" class="field-input" required>
                             <option value="efectivo" {{ old('metodo_pago') == 'efectivo' ? 'selected' : '' }}>Efectivo</option>
                             <option value="transferencia" {{ old('metodo_pago') == 'transferencia' ? 'selected' : '' }}>Transferencia</option>
                             <option value="mixto" {{ old('metodo_pago') == 'mixto' ? 'selected' : '' }}>Mixto</option>
@@ -52,87 +52,86 @@
                     </div>
 
                     <div id="cajaAbono" class="hidden">
-                        <label class="block mb-1 font-medium text-sm">Abono inicial</label>
-                        <input type="number" name="abono_inicial" min="0" step="1"
+                        <label for="abono_inicial" class="field-label">Abono inicial</label>
+                        <input type="number" id="abono_inicial" name="abono_inicial" min="0" step="1"
                                value="{{ old('abono_inicial', 0) }}"
-                               class="w-full border-gray-300 rounded text-sm text-right">
-                        <p class="text-xs text-gray-500 mt-1">Deje 0 si no abonó nada.</p>
+                               class="field-input text-right">
+                        <p class="field-hint">Deje 0 si no abonó nada.</p>
                     </div>
                 </div>
 
                 <div class="mb-4">
-                    <label class="block mb-1 font-medium text-sm">Nota (opcional)</label>
-                    <input type="text" name="nota" value="{{ old('nota') }}"
+                    <label for="nota" class="field-label">Nota (opcional)</label>
+                    <input type="text" id="nota" name="nota" value="{{ old('nota') }}"
                            placeholder="Ej: promete pagar el viernes"
-                           class="w-full border-gray-300 rounded text-sm">
+                           class="field-input">
                 </div>
 
-                <div class="border rounded p-4 mb-6 bg-gray-50">
-                    <h3 class="font-semibold mb-3 text-sm">
+                <div class="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-4">
+                    <h3 class="mb-3 text-sm font-semibold text-slate-800">
                         Datos del cliente
-                        <span class="font-normal text-gray-500">(para garantías y cobros)</span>
+                        <span class="font-normal text-slate-500">(para garantías y cobros)</span>
                     </h3>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                         <div>
-                            <label class="block mb-1 text-sm">Cédula</label>
+                            <label for="cedula" class="field-label">Cédula</label>
                             <input type="text" name="cedula" id="cedula"
                                    value="{{ old('cedula') }}"
-                                   class="w-full border-gray-300 rounded text-sm">
-                            <p id="avisoCliente" class="text-xs text-green-700 mt-1 hidden">
+                                   class="field-input">
+                            <p id="avisoCliente" class="mt-1.5 hidden text-xs font-medium text-emerald-700">
                                 Cliente encontrado
                             </p>
                         </div>
                         <div>
-                            <label class="block mb-1 text-sm">Nombre</label>
+                            <label for="nombre_cliente" class="field-label">Nombre</label>
                             <input type="text" name="nombre_cliente" id="nombre_cliente"
                                    value="{{ old('nombre_cliente') }}"
-                                   class="w-full border-gray-300 rounded text-sm">
+                                   class="field-input">
                         </div>
                         <div>
-                            <label class="block mb-1 text-sm">Teléfono</label>
+                            <label for="telefono" class="field-label">Teléfono</label>
                             <input type="text" name="telefono" id="telefono"
                                    value="{{ old('telefono') }}"
-                                   class="w-full border-gray-300 rounded text-sm">
+                                   class="field-input">
                         </div>
                     </div>
                 </div>
 
-                <h3 class="font-semibold mb-2">Productos vendidos</h3>
+                <h3 class="mb-2 text-sm font-semibold text-slate-800">Productos vendidos</h3>
 
-                <table class="w-full text-sm mb-4">
-                    <thead class="bg-gray-100">
-                        <tr>
-                            <th class="p-2 text-left">Producto</th>
-                            <th class="p-2 text-center w-24">Cant.</th>
-                            <th class="p-2 text-right w-36">Precio</th>
-                            <th class="p-2 text-center w-28">Garantía</th>
-                            <th class="p-2 text-right w-32">Subtotal</th>
-                            <th class="p-2 w-16"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="cuerpoDetalles"></tbody>
-                    <tfoot>
-                        <tr class="border-t font-semibold">
-                            <td colspan="4" class="p-2 text-right">Total</td>
-                            <td class="p-2 text-right" id="totalGeneral">$0</td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
+                <div class="table-wrap mb-4">
+                    <table class="table-base">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th class="w-24 text-center">Cant.</th>
+                                <th class="w-36 text-right">Precio</th>
+                                <th class="w-28 text-center">Garantía</th>
+                                <th class="w-32 text-right">Subtotal</th>
+                                <th class="w-16"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="cuerpoDetalles"></tbody>
+                        <tfoot>
+                            <tr class="border-t border-slate-200 bg-slate-50 font-semibold text-slate-700">
+                                <td colspan="4" class="px-4 py-2.5 text-right">Total</td>
+                                <td class="px-4 py-2.5 text-right" id="totalGeneral">$0</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
 
-                <button type="button" id="btnAgregar"
-                        class="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm">
-                    + Agregar producto
+                <button type="button" id="btnAgregar" class="btn-secondary btn-sm">
+                    <x-icon name="plus" class="h-4 w-4" /> Agregar producto
                 </button>
 
-                <div class="mt-6 flex gap-3 border-t pt-4">
-                    <button type="submit"
-                            class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                <div class="mt-6 flex gap-3 border-t border-slate-100 pt-6">
+                    <button type="submit" class="btn-primary">
                         Guardar venta
                     </button>
-                    <a href="{{ route('ventas.index') }}"
-                       class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
+                    <a href="{{ route('ventas.index') }}" class="btn-secondary">
                         Cancelar
                     </a>
                 </div>
@@ -165,30 +164,31 @@
         function agregarFila() {
             const i = fila++;
             const tr = document.createElement('tr');
-            tr.className = 'border-t';
             tr.innerHTML = `
-                <td class="p-2">
+                <td>
                     <select name="detalles[${i}][producto_id]" class="w-full text-sm" required>
                         <option value="">-- Seleccione --</option>
                         ${opciones()}
                     </select>
                 </td>
-                <td class="p-2">
+                <td>
                     <input type="number" name="detalles[${i}][cantidad]" min="1" value="1"
-                           class="w-full border-gray-300 rounded text-sm text-center cantidad" required>
-                    <p class="text-xs text-red-600 mt-1 hidden alertaStock">Sin stock</p>
+                           class="field-input text-center cantidad" required>
+                    <p class="mt-1 hidden text-xs font-medium text-red-600 alertaStock">Sin stock</p>
                 </td>
-                <td class="p-2">
+                <td>
                     <input type="number" name="detalles[${i}][precio_venta]" min="0" step="1" value="0"
-                           class="w-full border-gray-300 rounded text-sm text-right" required>
+                           class="field-input text-right" required>
                 </td>
-                <td class="p-2">
+                <td>
                     <input type="number" name="detalles[${i}][garantia_meses]" min="0" value="0"
-                           class="w-full border-gray-300 rounded text-sm text-center">
+                           class="field-input text-center">
                 </td>
-                <td class="p-2 text-right subtotal">$0</td>
-                <td class="p-2 text-center">
-                    <button type="button" class="text-red-600 text-sm btnQuitar">Quitar</button>
+                <td class="text-right subtotal font-medium text-slate-700">$0</td>
+                <td class="text-center">
+                    <button type="button" class="text-red-600 hover:text-red-700 btnQuitar" aria-label="Quitar producto">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4 inline"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
                 </td>
             `;
             cuerpo.appendChild(tr);
@@ -249,7 +249,7 @@
         });
 
         cuerpo.addEventListener('click', e => {
-            if (e.target.classList.contains('btnQuitar')) {
+            if (e.target.closest('.btnQuitar')) {
                 e.target.closest('tr').remove();
                 calcular();
             }
@@ -261,7 +261,7 @@
         const inputCedula = document.getElementById('cedula');
 
         const avisoCedula = document.createElement('p');
-        avisoCedula.className = 'text-xs text-orange-700 mt-1';
+        avisoCedula.className = 'mt-1.5 text-xs font-medium text-amber-700';
         avisoCedula.textContent = 'Obligatorio para fiados y separados';
 
         function actualizarTipoPago() {

@@ -1,115 +1,126 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800">Ventas</h2>
+        <h2 class="text-lg font-semibold text-slate-800">Ventas</h2>
     </x-slot>
 
-    <div class="py-6 max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-7xl space-y-4 px-4 py-6 sm:px-6 lg:px-8">
 
         @if (session('success'))
-            <div class="mb-4 p-4 bg-green-100 text-green-800 rounded">
-                {{ session('success') }}
-            </div>
+            <x-alert variant="success">{{ session('success') }}</x-alert>
         @endif
 
         @if (session('error'))
-            <div class="mb-4 p-4 bg-red-100 text-red-800 rounded">
-                {{ session('error') }}
-            </div>
+            <x-alert variant="error">{{ session('error') }}</x-alert>
         @endif
 
-        <div class="mb-4 flex flex-wrap justify-between items-center gap-4">
-            <div class="flex flex-wrap gap-2">
-                <a href="{{ route('ventas.create') }}"
-                   class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex flex-wrap items-center gap-2">
+                <a href="{{ route('ventas.create') }}" class="btn-primary">
+                    <x-icon name="plus" class="h-4 w-4" />
                     Registrar venta
                 </a>
 
-                <a href="{{ route('ventas.index') }}"
-                   class="px-3 py-2 rounded text-sm {{ !request('estado') ? 'bg-gray-800 text-white' : 'bg-gray-200 hover:bg-gray-300' }}">
-                    Todas
-                </a>
-                <a href="{{ route('ventas.index', ['estado' => 'pendientes']) }}"
-                   class="px-3 py-2 rounded text-sm {{ request('estado') == 'pendientes' ? 'bg-gray-800 text-white' : 'bg-gray-200 hover:bg-gray-300' }}">
-                    Con saldo
-                </a>
-                <a href="{{ route('ventas.index', ['estado' => 'por_entregar']) }}"
-                   class="px-3 py-2 rounded text-sm {{ request('estado') == 'por_entregar' ? 'bg-gray-800 text-white' : 'bg-gray-200 hover:bg-gray-300' }}">
-                    Por entregar
-                </a>
+                <div class="ml-2 flex flex-wrap gap-1 rounded-lg bg-slate-100 p-1">
+                    <a href="{{ route('ventas.index') }}"
+                       class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors {{ !request('estado') ? 'bg-white text-slate-800 shadow-soft' : 'text-slate-500 hover:text-slate-700' }}">
+                        Todas
+                    </a>
+                    <a href="{{ route('ventas.index', ['estado' => 'pendientes']) }}"
+                       class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors {{ request('estado') == 'pendientes' ? 'bg-white text-slate-800 shadow-soft' : 'text-slate-500 hover:text-slate-700' }}">
+                        Con saldo
+                    </a>
+                    <a href="{{ route('ventas.index', ['estado' => 'por_entregar']) }}"
+                       class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors {{ request('estado') == 'por_entregar' ? 'bg-white text-slate-800 shadow-soft' : 'text-slate-500 hover:text-slate-700' }}">
+                        Por entregar
+                    </a>
+                </div>
             </div>
 
-            <form method="GET" action="{{ route('ventas.index') }}" class="flex gap-2">
+            <form method="GET" action="{{ route('ventas.index') }}" class="relative">
+                @if (request('estado'))
+                    <input type="hidden" name="estado" value="{{ request('estado') }}">
+                @endif
+                <x-icon name="magnifying-glass" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
                 <input type="text" name="buscar" value="{{ request('buscar') }}"
                        placeholder="Buscar por cédula o nombre..."
-                       class="border-gray-300 rounded w-64 text-sm">
-                <button type="submit" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm">
-                    Buscar
-                </button>
+                       class="field-input w-64 py-2 pl-9 pr-3">
                 @if (request('buscar'))
-                    <a href="{{ route('ventas.index') }}"
-                       class="px-4 py-2 text-gray-600 hover:underline text-sm">Limpiar</a>
+                    <a href="{{ route('ventas.index', array_filter(['estado' => request('estado')])) }}"
+                       class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                        <x-icon name="x-mark" class="h-4 w-4" />
+                    </a>
                 @endif
             </form>
         </div>
 
-        <div class="bg-white shadow rounded overflow-x-auto">
-            <table class="w-full text-left text-sm">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="p-3">Fecha</th>
-                        <th class="p-3">Cliente</th>
-                        <th class="p-3">Tipo</th>
-                        <th class="p-3">Estado</th>
-                        <th class="p-3 text-right">Total</th>
-                        <th class="p-3 text-right">Saldo</th>
-                        <th class="p-3 text-right">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($ventas as $venta)
-                        <tr class="border-t">
-                            <td class="p-3">{{ $venta->fecha->format('d/m/Y') }}</td>
-                            <td class="p-3">
-                                {{ $venta->cliente->nombre ?? 'Sin datos' }}
-                                <span class="block text-xs text-gray-500">
-                                    {{ $venta->cliente->cedula ?? '' }}
-                                </span>
-                            </td>
-                            <td class="p-3 capitalize">{{ $venta->tipo_pago }}</td>
-                            <td class="p-3">
-                                @php $estado = $venta->estadoTexto(); @endphp
-                                <span class="px-2 py-1 rounded text-xs
-                                    @if ($estado === 'Pagada') bg-green-100 text-green-800
-                                    @elseif ($estado === 'Debe') bg-red-100 text-red-800
-                                    @elseif ($estado === 'Separado') bg-orange-100 text-orange-800
-                                    @else bg-blue-100 text-blue-800 @endif">
-                                    {{ $estado }}
-                                </span>
-                            </td>
-                            <td class="p-3 text-right">${{ number_format($venta->total, 0) }}</td>
-                            <td class="p-3 text-right {{ $venta->saldo > 0 ? 'text-red-700 font-medium' : 'text-gray-400' }}">
-                                {{ $venta->saldo > 0 ? '$' . number_format($venta->saldo, 0) : '-' }}
-                            </td>
-                            <td class="p-3 text-right whitespace-nowrap">
-                                <a href="{{ route('ventas.show', $venta) }}"
-                                   class="text-blue-600 hover:underline">Ver detalle</a>
-                                <a href="{{ route('ventas.factura', $venta) }}" target="_blank"
-                                   class="text-gray-700 hover:underline ml-3">Factura</a>
-                            </td>
-                        </tr>
-                    @empty
+        @if ($ventas->isEmpty())
+            <div class="card flex flex-col items-center gap-3 px-4 py-14 text-center">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                    <x-icon name="banknotes" class="h-6 w-6" />
+                </span>
+                <p class="font-medium text-slate-700">No hay ventas que coincidan</p>
+            </div>
+        @else
+            <div class="table-wrap">
+                <table class="table-base">
+                    <thead>
                         <tr>
-                            <td colspan="7" class="p-4 text-center text-gray-500">
-                                No hay ventas que coincidan.
-                            </td>
+                            <th>Fecha</th>
+                            <th>Cliente</th>
+                            <th>Tipo</th>
+                            <th>Estado</th>
+                            <th class="text-right">Total</th>
+                            <th class="text-right">Saldo</th>
+                            <th class="text-right">Acciones</th>
                         </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach ($ventas as $venta)
+                            <tr>
+                                <td>{{ $venta->fecha->format('d/m/Y') }}</td>
+                                <td>
+                                    {{ $venta->cliente->nombre ?? 'Sin datos' }}
+                                    <span class="block text-xs text-slate-400">
+                                        {{ $venta->cliente->cedula ?? '' }}
+                                    </span>
+                                </td>
+                                <td class="capitalize">{{ $venta->tipo_pago }}</td>
+                                <td>
+                                    @php $estado = $venta->estadoTexto(); @endphp
+                                    <x-badge :variant="match($estado) {
+                                        'Pagada' => 'success',
+                                        'Debe' => 'danger',
+                                        'Separado' => 'warning',
+                                        default => 'info',
+                                    }">
+                                        {{ $estado }}
+                                    </x-badge>
+                                </td>
+                                <td class="text-right">${{ number_format($venta->total, 0) }}</td>
+                                <td class="text-right {{ $venta->saldo > 0 ? 'font-medium text-red-700' : 'text-slate-400' }}">
+                                    {{ $venta->saldo > 0 ? '$' . number_format($venta->saldo, 0) : '-' }}
+                                </td>
+                                <td class="text-right whitespace-nowrap">
+                                    <div class="flex items-center justify-end gap-3">
+                                        <a href="{{ route('ventas.show', $venta) }}"
+                                           class="inline-flex items-center gap-1 text-brand-600 hover:text-brand-700">
+                                            <x-icon name="eye" class="h-4 w-4" /> Ver
+                                        </a>
+                                        <a href="{{ route('ventas.factura', $venta) }}" target="_blank"
+                                           class="inline-flex items-center gap-1 text-slate-500 hover:text-slate-700">
+                                            Factura
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @endif
 
-        <div class="mt-4">
-            {{ $ventas->links() }}
-        </div>
+        @if ($ventas->hasPages())
+            <div>{{ $ventas->links() }}</div>
+        @endif
     </div>
 </x-app-layout>

@@ -1,25 +1,25 @@
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
 
     <div>
-        <label class="block mb-1 font-medium">Referencia / Código</label>
-        <input type="text" name="referencia"
+        <label for="referencia" class="field-label">Referencia / Código</label>
+        <input type="text" id="referencia" name="referencia"
                value="{{ old('referencia', $producto->referencia ?? '') }}"
                placeholder="Opcional — ej: GOR-001"
-               class="w-full border-gray-300 rounded">
-        @error('referencia') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+               class="field-input">
+        @error('referencia') <p class="field-error">{{ $message }}</p> @enderror
     </div>
 
     <div>
-        <label class="block mb-1 font-medium">Nombre</label>
-        <input type="text" name="nombre"
+        <label for="nombre" class="field-label">Nombre</label>
+        <input type="text" id="nombre" name="nombre"
                value="{{ old('nombre', $producto->nombre ?? '') }}"
-               class="w-full border-gray-300 rounded" required>
-        @error('nombre') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+               class="field-input" required>
+        @error('nombre') <p class="field-error">{{ $message }}</p> @enderror
     </div>
 
     <div>
-        <label class="block mb-1 font-medium">Categoría</label>
-        <select name="categoria_id" class="w-full border-gray-300 rounded" required>
+        <label for="categoria_id" class="field-label">Categoría</label>
+        <select id="categoria_id" name="categoria_id" class="field-input" required>
             <option value="">-- Seleccione --</option>
             @foreach ($categorias as $categoria)
                 <option value="{{ $categoria->id }}"
@@ -28,60 +28,61 @@
                 </option>
             @endforeach
         </select>
-        @error('categoria_id') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+        @error('categoria_id') <p class="field-error">{{ $message }}</p> @enderror
     </div>
 
-        <div>
-        <label class="block mb-1 font-medium">Talla</label>
+    <div>
+        <label for="selectTalla" class="field-label">Talla</label>
         @php
             $tallas = ['XS','S','M','L','XL','XXL','Única','Ajustable'];
             $tallaActual = old('talla', $producto->talla ?? '');
             $esOtra = $tallaActual && !in_array($tallaActual, $tallas);
         @endphp
-        <select id="selectTalla" class="w-full border-gray-300 rounded">
+        <select id="selectTalla" class="field-input">
             <option value="">-- Sin talla --</option>
             @foreach ($tallas as $t)
                 <option value="{{ $t }}" {{ $tallaActual === $t ? 'selected' : '' }}>{{ $t }}</option>
             @endforeach
             <option value="__otra" {{ $esOtra ? 'selected' : '' }}>Otra...</option>
         </select>
+        <label for="inputTalla" class="sr-only">Talla personalizada</label>
         <input type="text" name="talla" id="inputTalla"
                value="{{ $tallaActual }}"
-               class="w-full border-gray-300 rounded mt-2 {{ $esOtra ? '' : 'hidden' }}"
+               class="field-input mt-2 {{ $esOtra ? '' : 'hidden' }}"
                placeholder="Escriba la talla">
-        @error('talla') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+        @error('talla') <p class="field-error">{{ $message }}</p> @enderror
     </div>
 
     <div>
-        <label class="block mb-1 font-medium">Color</label>
-        <input type="text" name="color"
+        <label for="color" class="field-label">Color</label>
+        <input type="text" id="color" name="color"
                value="{{ old('color', $producto->color ?? '') }}"
-               class="w-full border-gray-300 rounded">
-        @error('color') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+               class="field-input">
+        @error('color') <p class="field-error">{{ $message }}</p> @enderror
     </div>
 
     <div>
-        <label class="block mb-1 font-medium">Stock mínimo</label>
-        <input type="number" name="stock_minimo" min="0"
+        <label for="stock_minimo" class="field-label">Stock mínimo</label>
+        <input type="number" id="stock_minimo" name="stock_minimo" min="0"
                value="{{ old('stock_minimo', $producto->stock_minimo ?? 5) }}"
-               class="w-full border-gray-300 rounded" required>
-        @error('stock_minimo') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+               class="field-input" required>
+        @error('stock_minimo') <p class="field-error">{{ $message }}</p> @enderror
     </div>
 
     <div>
-        <label class="block mb-1 font-medium">Precio de compra</label>
-        <input type="number" name="precio_compra" step="1" min="0"
+        <label for="precio_compra" class="field-label">Precio de compra</label>
+        <input type="number" id="precio_compra" name="precio_compra" step="1" min="0"
                value="{{ old('precio_compra', $producto->precio_compra ?? '') }}"
-               class="w-full border-gray-300 rounded" required>
-        @error('precio_compra') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+               class="field-input" required>
+        @error('precio_compra') <p class="field-error">{{ $message }}</p> @enderror
     </div>
 
     <div>
-        <label class="block mb-1 font-medium">Precio de venta</label>
-        <input type="number" name="precio_venta" step="1" min="0"
+        <label for="precio_venta" class="field-label">Precio de venta</label>
+        <input type="number" id="precio_venta" name="precio_venta" step="1" min="0"
                value="{{ old('precio_venta', $producto->precio_venta ?? '') }}"
-               class="w-full border-gray-300 rounded" required>
-        @error('precio_venta') <p class="text-red-600 text-sm mt-1">{{ $message }}</p> @enderror
+               class="field-input" required>
+        @error('precio_venta') <p class="field-error">{{ $message }}</p> @enderror
     </div>
 
 </div>
