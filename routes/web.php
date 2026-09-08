@@ -7,6 +7,7 @@ use App\Http\Controllers\CompraController;
 use App\Http\Controllers\VentaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReporteController;
+use App\Http\Controllers\ClienteController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -42,6 +43,11 @@ Route::middleware('auth')->group(function () {
     Route::get('ventas/{venta}', [VentaController::class, 'show'])->name('ventas.show');
 
     Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');
+
+    Route::get('clientes', [ClienteController::class, 'index'])->name('clientes.index');
+    Route::get('clientes/{cliente}', [ClienteController::class, 'show'])->name('clientes.show');
+    Route::get('clientes/{cliente}/edit', [ClienteController::class, 'edit'])->name('clientes.edit');
+    Route::put('clientes/{cliente}', [ClienteController::class, 'update'])->name('clientes.update');
 });
 
 require __DIR__.'/auth.php';

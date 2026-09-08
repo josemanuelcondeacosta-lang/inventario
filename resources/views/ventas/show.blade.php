@@ -120,7 +120,7 @@
             </div>
         </div>
 
-        @if ($venta->saldo > 0)
+        @if ($venta->saldo > 0 && !$venta->anulada)
             <div class="card card-body border-l-4 border-l-red-500">
                 <h3 class="font-semibold text-slate-800">Registrar abono</h3>
                 <p class="mb-4 text-sm text-slate-500">
@@ -162,7 +162,7 @@
             </div>
         @endif
 
-        @if (!$venta->entregado)
+        @if (!$venta->entregado && !$venta->anulada)
             <div class="card card-body border-l-4 border-l-amber-500">
                 <h3 class="font-semibold text-slate-800">Producto separado</h3>
                 @if ($venta->saldo > 0)
@@ -268,6 +268,44 @@
                 @endforeach
             </div>
         </div>
+
+                @if ($venta->anulada)
+            <div class="card card-body border-l-4 border-l-slate-500">
+                <h3 class="font-semibold text-slate-800">Venta anulada</h3>
+                <p class="mt-1 text-sm text-slate-600">
+                    Fecha: {{ $venta->anulada_at->format('d/m/Y H:i') }}<br>
+                    Motivo: {{ $venta->motivo_anulacion }}
+                </p>
+            </div>
+        @else
+            <div class="card card-body">
+                <details>
+                    <summary class="cursor-pointer text-sm text-red-600 hover:underline">
+                        Anular esta venta
+                    </summary>
+
+                    <div class="mt-3 rounded-lg bg-red-50 p-4">
+                        <p class="mb-3 text-sm text-slate-700">
+                            Al anular, los productos volverán al inventario y el saldo pendiente se cancelará.
+                            La venta quedará registrada como anulada.
+                        </p>
+
+                        <form action="{{ route('ventas.anular', $venta) }}" method="POST"
+                              onsubmit="return confirm('¿Seguro que desea anular esta venta?')">
+                            @csrf
+                            <label for="motivo" class="field-label">Motivo de la anulación</label>
+                            <input type="text" id="motivo" name="motivo" required maxlength="200"
+                                   placeholder="Ej: el cliente devolvió la mercancía"
+                                   class="field-input mb-3">
+
+                            <button type="submit" class="btn-primary bg-red-600 hover:bg-red-700 focus:ring-red-500">
+                                Confirmar anulación
+                            </button>
+                        </form>
+                    </div>
+                </details>
+            </div>
+        @endif
 
         <div>
             <a href="{{ route('ventas.index') }}" class="btn-secondary">

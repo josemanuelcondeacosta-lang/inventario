@@ -24,12 +24,20 @@ class ReporteController extends Controller
 
         $rango = [$desde->format('Y-m-d'), $hasta->format('Y-m-d')];
 
-        $totalVentas = Venta::whereBetween('fecha', $rango)->sum('total');
-        $numVentas   = Venta::whereBetween('fecha', $rango)->count();
-        $totalCompras = Compra::whereBetween('fecha', $rango)->sum('total');
+        $totalVentas = Venta::where('anulada', false)
+            ->whereBetween('fecha', $rango)
+            ->sum('total');
+
+        $numVentas = Venta::where('anulada', false)
+            ->whereBetween('fecha', $rango)
+            ->count();
+
+        $totalCompras = Compra::where('anulada', false)
+            ->whereBetween('fecha', $rango)
+            ->sum('total');
 
         $detallesDelRango = VentaDetalle::whereHas('venta', function ($q) use ($rango) {
-            $q->whereBetween('fecha', $rango);
+            $q->where('anulada', false)->whereBetween('fecha', $rango);
         });
 
         $ganancia = (clone $detallesDelRango)
@@ -39,7 +47,7 @@ class ReporteController extends Controller
         $unidades = (clone $detallesDelRango)->sum('cantidad');
 
         $porProducto = VentaDetalle::whereHas('venta', function ($q) use ($rango) {
-                $q->whereBetween('fecha', $rango);
+                $q->where('anulada', false)->whereBetween('fecha', $rango);
             })
             ->select(
                 'producto_id',

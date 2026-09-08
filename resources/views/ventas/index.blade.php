@@ -76,7 +76,7 @@
                     </thead>
                     <tbody>
                         @foreach ($ventas as $venta)
-                            <tr>
+                            <tr class="{{ $venta->anulada ? 'opacity-50' : '' }}">
                                 <td>{{ $venta->fecha->format('d/m/Y') }}</td>
                                 <td>
                                     {{ $venta->cliente->nombre ?? 'Sin datos' }}
@@ -91,6 +91,7 @@
                                         'Pagada' => 'success',
                                         'Debe' => 'danger',
                                         'Separado' => 'warning',
+                                        'Anulada' => 'neutral',
                                         default => 'info',
                                     }">
                                         {{ $estado }}

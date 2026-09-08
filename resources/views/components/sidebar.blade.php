@@ -36,6 +36,10 @@
             Ventas
         </x-sidebar-link>
 
+        <x-sidebar-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')" icon="user-circle">
+            Clientes
+        </x-sidebar-link>
+
         <p class="px-3 pb-1 pt-4 text-xs font-semibold uppercase tracking-wider text-slate-500">Análisis</p>
 
         <x-sidebar-link :href="route('reportes.index')" :active="request()->routeIs('reportes.*')" icon="chart-bar">

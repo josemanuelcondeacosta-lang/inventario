@@ -15,16 +15,18 @@ class DashboardController extends Controller
         $inicioMes = Carbon::now()->startOfMonth();
         $finMes    = Carbon::now()->endOfMonth();
 
-        $ventasMes = Venta::whereBetween('fecha', [$inicioMes, $finMes])->sum('total');
+        $ventasMes = Venta::where('anulada', false)
+            ->whereBetween('fecha', [$inicioMes, $finMes])
+            ->sum('total');
 
         $gananciaMes = VentaDetalle::whereHas('venta', function ($q) use ($inicioMes, $finMes) {
-                $q->whereBetween('fecha', [$inicioMes, $finMes]);
+                $q->where('anulada', false)->whereBetween('fecha', [$inicioMes, $finMes]);
             })
             ->select(DB::raw('SUM((precio_venta - costo_unitario) * cantidad) as ganancia'))
             ->value('ganancia') ?? 0;
 
         $unidadesMes = VentaDetalle::whereHas('venta', function ($q) use ($inicioMes, $finMes) {
-                $q->whereBetween('fecha', [$inicioMes, $finMes]);
+                $q->where('anulada', false)->whereBetween('fecha', [$inicioMes, $finMes]);
             })
             ->sum('cantidad');
 
@@ -38,29 +40,32 @@ class DashboardController extends Controller
             ->get();
 
         $masVendidos = VentaDetalle::whereHas('venta', function ($q) use ($inicioMes, $finMes) {
-                $q->whereBetween('fecha', [$inicioMes, $finMes]);
-            })
-            ->select('producto_id', DB::raw('SUM(cantidad) as unidades'))
-            ->groupBy('producto_id')
-            ->orderByDesc('unidades')
-            ->with('producto')
-            ->limit(5)
-            ->get();
+            $q->where('anulada', false)->whereBetween('fecha', [$inicioMes, $finMes]);
+        })
+        ->select('producto_id', DB::raw('SUM(cantidad) as unidades'))
+        ->groupBy('producto_id')
+        ->orderByDesc('unidades')
+        ->with('producto')
+        ->limit(5)
+        ->get();
 
         $ultimasVentas = Venta::with('cliente')
+            ->where('anulada', false)
             ->orderByDesc('id')
             ->limit(5)
             ->get();
 
         
         $porCobrar = Venta::with('cliente')
-        ->where('saldo', '>', 0)
-        ->orderBy('fecha')
-        ->get();
+            ->where('anulada', false)
+            ->where('saldo', '>', 0)
+            ->orderBy('fecha')
+            ->get();
 
         $totalPorCobrar = $porCobrar->sum('saldo');
 
         $porEntregar = Venta::with('cliente')
+            ->where('anulada', false)
             ->where('entregado', false)
             ->orderBy('fecha')
             ->get();
