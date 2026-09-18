@@ -13,7 +13,7 @@ class ProductoController extends Controller
         $productos = Producto::with('categoria')
             ->when($request->buscar, function ($q) use ($request) {
                 $q->where('nombre', 'like', '%' . $request->buscar . '%')
-                ->orWhere('referencia', 'like', '%' . $request->buscar . '%');
+                  ->orWhere('referencia', 'like', '%' . $request->buscar . '%');
             })
             ->orderBy('nombre')
             ->paginate(15)
@@ -30,12 +30,80 @@ class ProductoController extends Controller
 
     public function store(Request $request)
     {
-        $datos = $this->validar($request);
+        $datos = $request->validate([
+            'categoria_id'  => 'required|exists:categorias,id',
+            'nombre'        => 'required|string|max:150',
+            'referencia'    => 'nullable|string|max:50',
+            'color'         => 'nullable|string|max:50',
+            'precio_compra' => 'required|numeric|min:0',
+            'precio_venta'  => 'required|numeric|min:0|gte:precio_compra',
+            'stock_minimo'  => 'required|integer|min:0',
+            'tallas'        => 'nullable|array',
+            'tallas.*'      => 'nullable|string|max:20',
+            'talla_otra'    => 'nullable|string|max:20',
+        ]);
 
-        Producto::create($datos);
+        $tallas = collect($datos['tallas'] ?? []);
+
+        if (!empty($datos['talla_otra'])) {
+            $tallas->push($datos['talla_otra']);
+        }
+
+        $tallas = $tallas->filter()->unique()->values();
+
+        if ($tallas->isEmpty()) {
+            $tallas = collect([null]);
+        }
+
+        $varias = $tallas->count() > 1;
+        $creados = 0;
+
+        foreach ($tallas as $talla) {
+
+            $referencia = $datos['referencia'] ?? null;
+
+            if ($referencia && $varias && $talla) {
+                $referencia = $referencia . '-' . strtoupper($talla);
+            }
+
+            if ($referencia && Producto::where('referencia', $referencia)->exists()) {
+                return back()->withInput()
+                    ->with('error', "La referencia {$referencia} ya existe.");
+            }
+
+            $existe = Producto::where('nombre', $datos['nombre'])
+                ->where('categoria_id', $datos['categoria_id'])
+                ->where('talla', $talla)
+                ->where('color', $datos['color'] ?? null)
+                ->exists();
+
+            if ($existe) {
+                continue;
+            }
+
+            Producto::create([
+                'referencia'    => $referencia,
+                'categoria_id'  => $datos['categoria_id'],
+                'nombre'        => $datos['nombre'],
+                'talla'         => $talla,
+                'color'         => $datos['color'] ?? null,
+                'precio_compra' => $datos['precio_compra'],
+                'precio_venta'  => $datos['precio_venta'],
+                'stock_minimo'  => $datos['stock_minimo'],
+            ]);
+
+            $creados++;
+        }
+
+        if ($creados === 0) {
+            return back()->withInput()
+                ->with('error', 'Esos productos ya estaban registrados.');
+        }
 
         return redirect()->route('productos.index')
-            ->with('success', 'Producto creado correctamente.');
+            ->with('success', $creados === 1
+                ? 'Producto creado correctamente.'
+                : "Se crearon {$creados} productos, uno por cada talla.");
     }
 
     public function edit(Producto $producto)
@@ -46,7 +114,16 @@ class ProductoController extends Controller
 
     public function update(Request $request, Producto $producto)
     {
-        $datos = $this->validar($request);
+        $datos = $request->validate([
+            'categoria_id'  => 'required|exists:categorias,id',
+            'nombre'        => 'required|string|max:150',
+            'referencia'    => 'nullable|string|max:50|unique:productos,referencia,' . $producto->id,
+            'talla'         => 'nullable|string|max:20',
+            'color'         => 'nullable|string|max:50',
+            'precio_compra' => 'required|numeric|min:0',
+            'precio_venta'  => 'required|numeric|min:0|gte:precio_compra',
+            'stock_minimo'  => 'required|integer|min:0',
+        ]);
 
         $producto->update($datos);
 
@@ -60,19 +137,5 @@ class ProductoController extends Controller
 
         return redirect()->route('productos.index')
             ->with('success', 'Producto desactivado.');
-    }
-
-    private function validar(Request $request)
-    {
-        return $request->validate([
-            'categoria_id'  => 'required|exists:categorias,id',
-            'nombre'        => 'required|string|max:150',
-            'talla'         => 'nullable|string|max:20',
-            'color'         => 'nullable|string|max:50',
-            'precio_compra' => 'required|numeric|min:0',
-            'precio_venta'  => 'required|numeric|min:0|gte:precio_compra',
-            'stock_minimo'  => 'required|integer|min:0',
-            'referencia' => 'nullable|string|max:50|unique:productos,referencia,' . ($request->route('producto')?->id ?? 'NULL'),
-        ]);
     }
 }

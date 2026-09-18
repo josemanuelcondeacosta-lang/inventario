@@ -3,7 +3,12 @@
         <h2 class="text-lg font-semibold text-slate-800">Nuevo producto</h2>
     </x-slot>
 
-    <div class="mx-auto max-w-3xl px-4 py-6 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-3xl space-y-4 px-4 py-6 sm:px-6 lg:px-8">
+
+        @if (session('error'))
+            <x-alert variant="error">{{ session('error') }}</x-alert>
+        @endif
+
         <div class="card card-body">
             <form action="{{ route('productos.store') }}" method="POST">
                 @csrf

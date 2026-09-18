@@ -1,11 +1,22 @@
+@php
+    $esNuevo = !isset($producto);
+    $tallasDisponibles = ['XS','S','M','L','XL','XXL','Única','Ajustable'];
+    $tallasViejas = old('tallas', []);
+@endphp
+
 <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
 
     <div>
         <label for="referencia" class="field-label">Referencia / Código</label>
         <input type="text" id="referencia" name="referencia"
                value="{{ old('referencia', $producto->referencia ?? '') }}"
-               placeholder="Opcional — ej: GOR-001"
+               placeholder="Opcional — ej: POL-001"
                class="field-input">
+        @if ($esNuevo)
+            <p class="mt-1 text-xs text-slate-500">
+                Si elige varias tallas, se le agrega la talla al final (POL-001-S, POL-001-M...).
+            </p>
+        @endif
         @error('referencia') <p class="field-error">{{ $message }}</p> @enderror
     </div>
 
@@ -32,34 +43,49 @@
     </div>
 
     <div>
-        <label for="selectTalla" class="field-label">Talla</label>
-        @php
-            $tallas = ['XS','S','M','L','XL','XXL','Única','Ajustable'];
-            $tallaActual = old('talla', $producto->talla ?? '');
-            $esOtra = $tallaActual && !in_array($tallaActual, $tallas);
-        @endphp
-        <select id="selectTalla" class="field-input">
-            <option value="">-- Sin talla --</option>
-            @foreach ($tallas as $t)
-                <option value="{{ $t }}" {{ $tallaActual === $t ? 'selected' : '' }}>{{ $t }}</option>
-            @endforeach
-            <option value="__otra" {{ $esOtra ? 'selected' : '' }}>Otra...</option>
-        </select>
-        <label for="inputTalla" class="sr-only">Talla personalizada</label>
-        <input type="text" name="talla" id="inputTalla"
-               value="{{ $tallaActual }}"
-               class="field-input mt-2 {{ $esOtra ? '' : 'hidden' }}"
-               placeholder="Escriba la talla">
-        @error('talla') <p class="field-error">{{ $message }}</p> @enderror
-    </div>
-
-    <div>
         <label for="color" class="field-label">Color</label>
         <input type="text" id="color" name="color"
                value="{{ old('color', $producto->color ?? '') }}"
                class="field-input">
         @error('color') <p class="field-error">{{ $message }}</p> @enderror
     </div>
+
+    @if ($esNuevo)
+        <div class="md:col-span-2">
+            <label class="field-label">Tallas</label>
+            <p class="mb-2 text-xs text-slate-500">
+                Marque todas las que aplican. Se crea un producto por cada talla, con los mismos precios.
+            </p>
+
+            <div class="flex flex-wrap gap-2">
+                @foreach ($tallasDisponibles as $t)
+                    <label class="cursor-pointer">
+                        <input type="checkbox" name="tallas[]" value="{{ $t }}"
+                               class="peer sr-only"
+                               {{ in_array($t, $tallasViejas) ? 'checked' : '' }}>
+                        <span class="inline-flex min-w-[3.2rem] items-center justify-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:border-slate-400 peer-checked:border-brand-600 peer-checked:bg-brand-600 peer-checked:text-white">
+                            {{ $t }}
+                        </span>
+                    </label>
+                @endforeach
+            </div>
+
+            <div class="mt-3">
+                <input type="text" name="talla_otra" value="{{ old('talla_otra') }}"
+                       placeholder="Otra talla (opcional) — ej: 38, 40"
+                       class="field-input md:w-1/2">
+            </div>
+            @error('tallas') <p class="field-error">{{ $message }}</p> @enderror
+        </div>
+    @else
+        <div>
+            <label for="talla" class="field-label">Talla</label>
+            <input type="text" id="talla" name="talla"
+                   value="{{ old('talla', $producto->talla) }}"
+                   class="field-input">
+            @error('talla') <p class="field-error">{{ $message }}</p> @enderror
+        </div>
+    @endif
 
     <div>
         <label for="stock_minimo" class="field-label">Stock mínimo</label>
@@ -92,20 +118,6 @@ document.addEventListener('DOMContentLoaded', function () {
     new TomSelect('select[name="categoria_id"]', {
         placeholder: 'Buscar categoría...',
         maxOptions: null,
-    });
-
-        const selectTalla = document.getElementById('selectTalla');
-    const inputTalla = document.getElementById('inputTalla');
-
-    selectTalla.addEventListener('change', function () {
-        if (this.value === '__otra') {
-            inputTalla.classList.remove('hidden');
-            inputTalla.value = '';
-            inputTalla.focus();
-        } else {
-            inputTalla.classList.add('hidden');
-            inputTalla.value = this.value;
-        }
     });
 });
 </script>

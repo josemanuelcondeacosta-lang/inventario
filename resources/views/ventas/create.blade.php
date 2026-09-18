@@ -140,24 +140,34 @@
     </div>
 
     @php
-        $productosJs = $productos->map(fn($p) => [
-            'id'     => $p->id,
-            'nombre' => trim($p->nombre . ' — ' . $p->talla . ' ' . $p->color) . " (stock: {$p->stock})",
-            'precio' => (float) $p->precio_venta,
-            'stock'  => $p->stock,
-        ]);
+        $productosJs = $productos->map(function ($p) {
+            $modelo = $p->nombre . ($p->color ? ' — ' . $p->color : '');
+            return [
+                'id'     => $p->id,
+                'talla'  => $p->talla ?: 'Única',
+                'modelo' => $modelo,
+                'ref'    => $p->referencia,
+                'buscar' => trim($modelo . ' ' . $p->talla . ' ' . $p->referencia),
+                'precio' => (float) $p->precio_venta,
+                'stock'  => $p->stock,
+            ];
+        })->values();
+
+        $modelosJs = $productos->groupBy(fn($p) => $p->nombre . ($p->color ? ' — ' . $p->color : ''))
+            ->keys()->values();
     @endphp
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
+       <script>
+        document.addEventListener('DOMContentLoaded', function () {
 
         const PRODUCTOS = @json($productosJs);
+        const MODELOS = @json($modelosJs);
         let fila = 0;
         const cuerpo = document.getElementById('cuerpoDetalles');
 
         function opciones() {
             return PRODUCTOS.map(p =>
-                `<option value="${p.id}">${p.nombre}</option>`
+                `<option value="${p.id}" data-modelo="${p.modelo}">${p.talla}${p.ref ? ' · ' + p.ref : ''} — hay ${p.stock}</option>`
             ).join('');
         }
 
@@ -196,8 +206,16 @@
             const select = tr.querySelector('select');
 
             new TomSelect(select, {
-                placeholder: 'Buscar producto...',
+                placeholder: 'Buscar por nombre, talla o referencia...',
                 maxOptions: null,
+                optgroupField: 'modelo',
+                searchField: ['text', 'modelo'],
+                optgroups: MODELOS.map(m => ({ value: m, label: m })),
+                lockOptgroupOrder: true,
+                render: {
+                    optgroup_header: (data, escape) =>
+                        `<div class="px-3 py-1.5 text-xs font-semibold text-slate-500 bg-slate-50">${escape(data.label)}</div>`,
+                },
             });
 
             select.addEventListener('change', function () {
