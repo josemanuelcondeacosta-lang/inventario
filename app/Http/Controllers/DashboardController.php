@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Producto;
 use App\Models\Venta;
 use App\Models\VentaDetalle;
+use App\Models\Reclamo;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -24,6 +25,10 @@ class DashboardController extends Controller
             })
             ->select(DB::raw('SUM((precio_venta - costo_unitario) * cantidad) as ganancia'))
             ->value('ganancia') ?? 0;
+
+        $perdidaGarantias = Reclamo::whereBetween('fecha', [$inicioMes, $finMes])->sum('perdida');
+
+        $gananciaNeta = $gananciaMes - $perdidaGarantias;
 
         $unidadesMes = VentaDetalle::whereHas('venta', function ($q) use ($inicioMes, $finMes) {
                 $q->where('anulada', false)->whereBetween('fecha', [$inicioMes, $finMes]);
@@ -73,7 +78,8 @@ class DashboardController extends Controller
         return view('dashboard', compact(
             'ventasMes', 'gananciaMes', 'unidadesMes', 'valorInventario',
             'stockBajo', 'masVendidos', 'ultimasVentas',
-            'porCobrar', 'totalPorCobrar', 'porEntregar'
+            'porCobrar', 'totalPorCobrar', 'porEntregar',
+            'perdidaGarantias', 'gananciaNeta'
         ));
     }
 }

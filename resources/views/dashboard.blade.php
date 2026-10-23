@@ -17,8 +17,15 @@
             <div class="card card-body relative overflow-hidden">
                 <div class="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-brand/10"></div>
                 <p class="cifra-label">Ganancia del mes</p>
-                <p class="cifra-brand mt-2">${{ number_format($gananciaMes, 0) }}</p>
-                <p class="mt-1 text-xs text-tenue">ya descontado el costo</p>
+                <p class="cifra-brand mt-2">${{ number_format($gananciaNeta, 0) }}</p>
+                @if ($perdidaGarantias > 0)
+                    <p class="mt-1 text-xs text-tenue">
+                        ${{ number_format($gananciaMes, 0) }} menos
+                        <span class="text-alerta">${{ number_format($perdidaGarantias, 0) }}</span> en garantías
+                    </p>
+                @else
+                    <p class="mt-1 text-xs text-tenue">ya descontado el costo</p>
+                @endif
             </div>
 
             <div class="card card-body">

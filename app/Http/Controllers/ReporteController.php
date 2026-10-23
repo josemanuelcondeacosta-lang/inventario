@@ -6,6 +6,7 @@ use App\Models\Compra;
 use App\Models\Producto;
 use App\Models\Venta;
 use App\Models\VentaDetalle;
+use App\Models\Reclamo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -46,6 +47,9 @@ class ReporteController extends Controller
 
         $unidades = (clone $detallesDelRango)->sum('cantidad');
 
+        $perdidaGarantias = Reclamo::whereBetween('fecha', $rango)->sum('perdida');
+        $gananciaNeta = $ganancia - $perdidaGarantias;
+
         $porProducto = VentaDetalle::whereHas('venta', function ($q) use ($rango) {
                 $q->where('anulada', false)->whereBetween('fecha', $rango);
             })
@@ -67,7 +71,7 @@ class ReporteController extends Controller
 
         return view('reportes.index', compact(
             'desde', 'hasta', 'totalVentas', 'numVentas', 'totalCompras',
-            'ganancia', 'unidades', 'porProducto', 'inventario'
+            'ganancia', 'unidades', 'porProducto', 'inventario', 'perdidaGarantias', 'gananciaNeta'
         ));
     }
 }

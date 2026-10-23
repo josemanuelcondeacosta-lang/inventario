@@ -37,8 +37,14 @@
                 <p class="text-xl font-semibold text-texto">${{ number_format($totalVentas, 0) }}</p>
             </div>
             <div class="card card-body">
-                <p class="text-xs font-medium text-tenue">Ganancia</p>
-                <p class="text-xl font-semibold text-brand">${{ number_format($ganancia, 0) }}</p>
+                <p class="cifra-label">Ganancia</p>
+                <p class="cifra mt-2 text-brand">${{ number_format($gananciaNeta, 0) }}</p>
+            </div>
+            <div class="card card-body">
+                <p class="cifra-label">Garantías</p>
+                <p class="cifra mt-2 {{ $perdidaGarantias > 0 ? 'text-alerta' : 'text-tenue' }}">
+                    ${{ number_format($perdidaGarantias, 0) }}
+                </p>
             </div>
             <div class="card card-body">
                 <p class="text-xs font-medium text-tenue">Compras</p>
