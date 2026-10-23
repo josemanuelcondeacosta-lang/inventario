@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="mb-6">
-        <h1 class="text-xl font-semibold text-slate-900">Crear cuenta</h1>
-        <p class="mt-1 text-sm text-slate-500">Completa tus datos para registrarte.</p>
+        <h1 class="text-xl font-semibold text-texto">Crear cuenta</h1>
+        <p class="mt-1 text-sm text-tenue">Completa tus datos para registrarte.</p>
     </div>
 
     <form method="POST" action="{{ route('register') }}" class="space-y-4">
@@ -45,7 +45,7 @@
         </div>
 
         <div class="flex items-center justify-between gap-4">
-            <a class="text-sm font-medium text-brand-600 hover:text-brand-700" href="{{ route('login') }}">
+            <a class="text-sm font-medium text-brand hover:text-brand" href="{{ route('login') }}">
                 ¿Ya tienes cuenta?
             </a>
 

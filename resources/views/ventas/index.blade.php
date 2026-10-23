@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-lg font-semibold text-slate-800">Ventas</h2>
+        <h2 class="text-lg font-semibold text-texto">Ventas</h2>
     </x-slot>
 
     <div class="mx-auto max-w-7xl space-y-4 px-4 py-6 sm:px-6 lg:px-8">
@@ -20,17 +20,17 @@
                     Registrar venta
                 </a>
 
-                <div class="ml-2 flex flex-wrap gap-1 rounded-lg bg-slate-100 p-1">
+                <div class="ml-2 flex flex-wrap gap-1 rounded-lg bg-elevado p-1">
                     <a href="{{ route('ventas.index') }}"
-                       class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors {{ !request('estado') ? 'bg-white text-slate-800 shadow-soft' : 'text-slate-500 hover:text-slate-700' }}">
+                       class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors {{ !request('estado') ? 'bg-superficie text-texto shadow-soft' : 'text-tenue hover:text-suave' }}">
                         Todas
                     </a>
                     <a href="{{ route('ventas.index', ['estado' => 'pendientes']) }}"
-                       class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors {{ request('estado') == 'pendientes' ? 'bg-white text-slate-800 shadow-soft' : 'text-slate-500 hover:text-slate-700' }}">
+                       class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors {{ request('estado') == 'pendientes' ? 'bg-superficie text-texto shadow-soft' : 'text-tenue hover:text-suave' }}">
                         Con saldo
                     </a>
                     <a href="{{ route('ventas.index', ['estado' => 'por_entregar']) }}"
-                       class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors {{ request('estado') == 'por_entregar' ? 'bg-white text-slate-800 shadow-soft' : 'text-slate-500 hover:text-slate-700' }}">
+                       class="rounded-md px-3 py-1.5 text-sm font-medium transition-colors {{ request('estado') == 'por_entregar' ? 'bg-superficie text-texto shadow-soft' : 'text-tenue hover:text-suave' }}">
                         Por entregar
                     </a>
                 </div>
@@ -40,13 +40,13 @@
                 @if (request('estado'))
                     <input type="hidden" name="estado" value="{{ request('estado') }}">
                 @endif
-                <x-icon name="magnifying-glass" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                <x-icon name="magnifying-glass" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-tenue" />
                 <input type="text" name="buscar" value="{{ request('buscar') }}"
                        placeholder="Buscar por cédula o nombre..."
                        class="field-input w-64 py-2 pl-9 pr-3">
                 @if (request('buscar'))
                     <a href="{{ route('ventas.index', array_filter(['estado' => request('estado')])) }}"
-                       class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                       class="absolute right-3 top-1/2 -translate-y-1/2 text-tenue hover:text-suave">
                         <x-icon name="x-mark" class="h-4 w-4" />
                     </a>
                 @endif
@@ -55,10 +55,10 @@
 
         @if ($ventas->isEmpty())
             <div class="card flex flex-col items-center gap-3 px-4 py-14 text-center">
-                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-elevado text-tenue">
                     <x-icon name="banknotes" class="h-6 w-6" />
                 </span>
-                <p class="font-medium text-slate-700">No hay ventas que coincidan</p>
+                <p class="font-medium text-suave">No hay ventas que coincidan</p>
             </div>
         @else
             <div class="table-wrap">
@@ -80,7 +80,7 @@
                                 <td>{{ $venta->fecha->format('d/m/Y') }}</td>
                                 <td>
                                     {{ $venta->cliente->nombre ?? 'Sin datos' }}
-                                    <span class="block text-xs text-slate-400">
+                                    <span class="block text-xs text-tenue">
                                         {{ $venta->cliente->cedula ?? '' }}
                                     </span>
                                 </td>
@@ -98,17 +98,17 @@
                                     </x-badge>
                                 </td>
                                 <td class="text-right">${{ number_format($venta->total, 0) }}</td>
-                                <td class="text-right {{ $venta->saldo > 0 ? 'font-medium text-red-700' : 'text-slate-400' }}">
+                                <td class="text-right {{ $venta->saldo > 0 ? 'font-medium text-alerta' : 'text-tenue' }}">
                                     {{ $venta->saldo > 0 ? '$' . number_format($venta->saldo, 0) : '-' }}
                                 </td>
                                 <td class="text-right whitespace-nowrap">
                                     <div class="flex items-center justify-end gap-3">
                                         <a href="{{ route('ventas.show', $venta) }}"
-                                           class="inline-flex items-center gap-1 text-brand-600 hover:text-brand-700">
+                                           class="inline-flex items-center gap-1 text-brand hover:text-brand">
                                             <x-icon name="eye" class="h-4 w-4" /> Ver
                                         </a>
                                         <a href="{{ route('ventas.factura', $venta) }}" target="_blank"
-                                           class="inline-flex items-center gap-1 text-slate-500 hover:text-slate-700">
+                                           class="inline-flex items-center gap-1 text-tenue hover:text-suave">
                                             Factura
                                         </a>
                                     </div>

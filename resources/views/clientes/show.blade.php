@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-lg font-semibold text-slate-800">Historial del cliente</h2>
+        <h2 class="text-lg font-semibold text-texto">Historial del cliente</h2>
     </x-slot>
 
     <div class="mx-auto max-w-5xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
@@ -13,16 +13,16 @@
             <div class="flex flex-wrap items-start justify-between gap-4">
                 <div class="grid grid-cols-2 gap-6 text-sm md:grid-cols-3">
                     <div>
-                        <span class="text-slate-500">Nombre</span>
-                        <p class="font-medium text-slate-800">{{ $cliente->nombre }}</p>
+                        <span class="text-tenue">Nombre</span>
+                        <p class="font-medium text-texto">{{ $cliente->nombre }}</p>
                     </div>
                     <div>
-                        <span class="text-slate-500">Cédula</span>
-                        <p class="font-medium text-slate-800">{{ $cliente->cedula }}</p>
+                        <span class="text-tenue">Cédula</span>
+                        <p class="font-medium text-texto">{{ $cliente->cedula }}</p>
                     </div>
                     <div>
-                        <span class="text-slate-500">Teléfono</span>
-                        <p class="font-medium text-slate-800">{{ $cliente->telefono ?? '-' }}</p>
+                        <span class="text-tenue">Teléfono</span>
+                        <p class="font-medium text-texto">{{ $cliente->telefono ?? '-' }}</p>
                     </div>
                 </div>
 
@@ -31,20 +31,20 @@
                 </a>
             </div>
 
-            <div class="mt-6 grid grid-cols-2 gap-4 border-t border-slate-100 pt-4 text-sm md:grid-cols-3">
+            <div class="mt-6 grid grid-cols-2 gap-4 border-t border-borde pt-4 text-sm md:grid-cols-3">
                 <div>
-                    <span class="text-slate-500">Compras realizadas</span>
-                    <p class="text-lg font-semibold text-slate-800">
+                    <span class="text-tenue">Compras realizadas</span>
+                    <p class="text-lg font-semibold text-texto">
                         {{ $cliente->ventas->where('anulada', false)->count() }}
                     </p>
                 </div>
                 <div>
-                    <span class="text-slate-500">Total comprado</span>
-                    <p class="text-lg font-semibold text-slate-800">${{ number_format($totalComprado, 0) }}</p>
+                    <span class="text-tenue">Total comprado</span>
+                    <p class="text-lg font-semibold text-texto">${{ number_format($totalComprado, 0) }}</p>
                 </div>
                 <div>
-                    <span class="text-slate-500">Saldo pendiente</span>
-                    <p class="text-lg font-semibold {{ $saldoTotal > 0 ? 'text-red-700' : 'text-slate-400' }}">
+                    <span class="text-tenue">Saldo pendiente</span>
+                    <p class="text-lg font-semibold {{ $saldoTotal > 0 ? 'text-alerta' : 'text-tenue' }}">
                         ${{ number_format($saldoTotal, 0) }}
                     </p>
                 </div>
@@ -67,9 +67,9 @@
                     </div>
 
                     <div class="flex items-center gap-3 text-sm">
-                        <span class="font-semibold text-slate-800">${{ number_format($venta->total, 0) }}</span>
+                        <span class="font-semibold text-texto">${{ number_format($venta->total, 0) }}</span>
                         <a href="{{ route('ventas.show', $venta) }}"
-                           class="text-brand-600 hover:text-brand-700">Ver venta</a>
+                           class="text-brand hover:text-brand">Ver venta</a>
                     </div>
                 </div>
 
@@ -88,7 +88,7 @@
                                 <tr>
                                     <td>
                                         {{ $detalle->producto->nombre }}
-                                        <span class="text-slate-400">
+                                        <span class="text-tenue">
                                             {{ $detalle->producto->talla }} {{ $detalle->producto->color }}
                                         </span>
                                     </td>
@@ -104,7 +104,7 @@
                                                 {{ $vigente ? 'Vigente hasta' : 'Venció' }} {{ $vence->format('d/m/Y') }}
                                             </x-badge>
                                         @else
-                                            <span class="text-slate-400">Sin garantía</span>
+                                            <span class="text-tenue">Sin garantía</span>
                                         @endif
                                     </td>
                                 </tr>
@@ -114,7 +114,7 @@
                 </div>
             </div>
         @empty
-            <div class="card card-body text-center text-slate-500">
+            <div class="card card-body text-center text-tenue">
                 Este cliente no tiene ventas registradas.
             </div>
         @endforelse

@@ -13,7 +13,7 @@
                placeholder="Opcional — ej: POL-001"
                class="field-input">
         @if ($esNuevo)
-            <p class="mt-1 text-xs text-slate-500">
+            <p class="mt-1 text-xs text-tenue">
                 Si elige varias tallas, se le agrega la talla al final (POL-001-S, POL-001-M...).
             </p>
         @endif
@@ -53,7 +53,7 @@
     @if ($esNuevo)
         <div class="md:col-span-2">
             <label class="field-label">Tallas</label>
-            <p class="mb-2 text-xs text-slate-500">
+            <p class="mb-2 text-xs text-tenue">
                 Marque todas las que aplican. Se crea un producto por cada talla, con los mismos precios.
             </p>
 
@@ -63,7 +63,7 @@
                         <input type="checkbox" name="tallas[]" value="{{ $t }}"
                                class="peer sr-only"
                                {{ in_array($t, $tallasViejas) ? 'checked' : '' }}>
-                        <span class="inline-flex min-w-[3.2rem] items-center justify-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-600 transition-colors hover:border-slate-400 peer-checked:border-brand-600 peer-checked:bg-brand-600 peer-checked:text-white">
+                        <span class="inline-flex min-w-[3.2rem] items-center justify-center rounded-lg border border-borde bg-superficie px-3 py-2 text-sm font-medium text-suave transition-colors hover:border-slate-400 peer-checked:border-brand-600 peer-checked:bg-brand-600 peer-checked:text-texto">
                             {{ $t }}
                         </span>
                     </label>

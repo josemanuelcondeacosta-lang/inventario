@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-lg font-semibold text-slate-800">Reportes</h2>
+        <h2 class="text-lg font-semibold text-texto">Reportes</h2>
     </x-slot>
 
     <div class="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
@@ -27,30 +27,30 @@
             </form>
         </div>
 
-        <p class="text-sm text-slate-500">
-            Período: <span class="font-medium text-slate-700">{{ $desde->format('d/m/Y') }} — {{ $hasta->format('d/m/Y') }}</span>
+        <p class="text-sm text-tenue">
+            Período: <span class="font-medium text-suave">{{ $desde->format('d/m/Y') }} — {{ $hasta->format('d/m/Y') }}</span>
         </p>
 
         <div class="grid grid-cols-2 gap-4 md:grid-cols-5">
             <div class="card card-body">
-                <p class="text-xs font-medium text-slate-500">Ventas</p>
-                <p class="text-xl font-semibold text-slate-800">${{ number_format($totalVentas, 0) }}</p>
+                <p class="text-xs font-medium text-tenue">Ventas</p>
+                <p class="text-xl font-semibold text-texto">${{ number_format($totalVentas, 0) }}</p>
             </div>
             <div class="card card-body">
-                <p class="text-xs font-medium text-slate-500">Ganancia</p>
-                <p class="text-xl font-semibold text-emerald-700">${{ number_format($ganancia, 0) }}</p>
+                <p class="text-xs font-medium text-tenue">Ganancia</p>
+                <p class="text-xl font-semibold text-brand">${{ number_format($ganancia, 0) }}</p>
             </div>
             <div class="card card-body">
-                <p class="text-xs font-medium text-slate-500">Compras</p>
-                <p class="text-xl font-semibold text-amber-700">${{ number_format($totalCompras, 0) }}</p>
+                <p class="text-xs font-medium text-tenue">Compras</p>
+                <p class="text-xl font-semibold text-aviso">${{ number_format($totalCompras, 0) }}</p>
             </div>
             <div class="card card-body">
-                <p class="text-xs font-medium text-slate-500">N° de ventas</p>
-                <p class="text-xl font-semibold text-slate-800">{{ $numVentas }}</p>
+                <p class="text-xs font-medium text-tenue">N° de ventas</p>
+                <p class="text-xl font-semibold text-texto">{{ $numVentas }}</p>
             </div>
             <div class="card card-body">
-                <p class="text-xs font-medium text-slate-500">Unidades</p>
-                <p class="text-xl font-semibold text-slate-800">{{ $unidades }}</p>
+                <p class="text-xs font-medium text-tenue">Unidades</p>
+                <p class="text-xl font-semibold text-texto">{{ $unidades }}</p>
             </div>
         </div>
 
@@ -74,20 +74,20 @@
                             <tr>
                                 <td>
                                     {{ $item->producto->nombre }}
-                                    <span class="text-slate-400">
+                                    <span class="text-tenue">
                                         {{ $item->producto->talla }} {{ $item->producto->color }}
                                     </span>
                                 </td>
                                 <td>{{ $item->producto->categoria->nombre }}</td>
                                 <td class="text-center">{{ $item->unidades }}</td>
                                 <td class="text-right">${{ number_format($item->ingresos, 0) }}</td>
-                                <td class="text-right text-emerald-700">
+                                <td class="text-right text-brand">
                                     ${{ number_format($item->ganancia, 0) }}
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="p-6 text-center text-slate-500">
+                                <td colspan="5" class="p-6 text-center text-tenue">
                                     No hay ventas en este período.
                                 </td>
                             </tr>
@@ -95,11 +95,11 @@
                     </tbody>
                     @if ($porProducto->count())
                         <tfoot>
-                            <tr class="border-t border-slate-200 bg-slate-50 font-semibold text-slate-700">
+                            <tr class="border-t border-borde bg-elevado font-semibold text-suave">
                                 <td colspan="2" class="px-4 py-2.5 text-right">Totales</td>
                                 <td class="px-4 py-2.5 text-center">{{ $porProducto->sum('unidades') }}</td>
                                 <td class="px-4 py-2.5 text-right">${{ number_format($porProducto->sum('ingresos'), 0) }}</td>
-                                <td class="px-4 py-2.5 text-right text-emerald-700">
+                                <td class="px-4 py-2.5 text-right text-brand">
                                     ${{ number_format($porProducto->sum('ganancia'), 0) }}
                                 </td>
                             </tr>
@@ -129,7 +129,7 @@
                             <tr>
                                 <td>
                                     {{ $producto->nombre }}
-                                    <span class="text-slate-400">
+                                    <span class="text-tenue">
                                         {{ $producto->talla }} {{ $producto->color }}
                                     </span>
                                 </td>
@@ -149,7 +149,7 @@
                         @endforeach
                     </tbody>
                     <tfoot>
-                        <tr class="border-t border-slate-200 bg-slate-50 font-semibold text-slate-700">
+                        <tr class="border-t border-borde bg-elevado font-semibold text-suave">
                             <td colspan="4" class="px-4 py-2.5 text-right">Valor total del inventario</td>
                             <td class="px-4 py-2.5 text-right">
                                 ${{ number_format($inventario->sum(fn($p) => $p->stock * $p->precio_compra), 0) }}

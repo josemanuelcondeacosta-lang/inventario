@@ -47,4 +47,9 @@ class Venta extends Model
         if (!$this->entregado) return 'Por entregar';
         return 'Pagada';
     }
+
+        public function reclamos()
+    {
+        return $this->hasMany(Reclamo::class);
+    }
 }

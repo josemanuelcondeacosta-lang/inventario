@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-lg font-semibold text-slate-800">Registrar venta</h2>
+        <h2 class="text-lg font-semibold text-texto">Registrar venta</h2>
     </x-slot>
 
     <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
@@ -22,7 +22,8 @@
                 <div class="mb-4 grid grid-cols-1 gap-4 md:grid-cols-4">
                     <div>
                         <label for="fecha" class="field-label">Fecha</label>
-                        <input type="date" id="fecha" name="fecha" value="{{ old('fecha', date('Y-m-d')) }}"
+                        <input type="date" id="fecha" name="fecha"
+                               value="{{ old('fecha', date('Y-m-d')) }}"
                                max="{{ date('Y-m-d') }}"
                                class="field-input" required>
                     </div>
@@ -30,21 +31,15 @@
                     <div>
                         <label for="tipo_pago" class="field-label">Tipo de pago</label>
                         <select name="tipo_pago" id="tipo_pago" class="field-input" required>
-                            <option value="contado" {{ old('tipo_pago') == 'contado' ? 'selected' : '' }}>
-                                Contado (pago completo)
-                            </option>
-                            <option value="fiado" {{ old('tipo_pago') == 'fiado' ? 'selected' : '' }}>
-                                Fiado (se lleva, paga después)
-                            </option>
-                            <option value="separado" {{ old('tipo_pago') == 'separado' ? 'selected' : '' }}>
-                                Separado (se aparta, paga por cuotas)
-                            </option>
+                            <option value="contado" {{ old('tipo_pago') == 'contado' ? 'selected' : '' }}>Contado</option>
+                            <option value="fiado" {{ old('tipo_pago') == 'fiado' ? 'selected' : '' }}>Fiado</option>
+                            <option value="separado" {{ old('tipo_pago') == 'separado' ? 'selected' : '' }}>Separado</option>
                         </select>
                     </div>
 
                     <div>
                         <label for="metodo_pago" class="field-label">Método de pago</label>
-                        <select id="metodo_pago" name="metodo_pago" class="field-input" required>
+                        <select name="metodo_pago" id="metodo_pago" class="field-input" required>
                             <option value="efectivo" {{ old('metodo_pago') == 'efectivo' ? 'selected' : '' }}>Efectivo</option>
                             <option value="transferencia" {{ old('metodo_pago') == 'transferencia' ? 'selected' : '' }}>Transferencia</option>
                             <option value="mixto" {{ old('metodo_pago') == 'mixto' ? 'selected' : '' }}>Mixto</option>
@@ -56,84 +51,60 @@
                         <input type="number" id="abono_inicial" name="abono_inicial" min="0" step="1"
                                value="{{ old('abono_inicial', 0) }}"
                                class="field-input text-right">
-                        <p class="field-hint">Deje 0 si no abonó nada.</p>
                     </div>
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-6">
                     <label for="nota" class="field-label">Nota (opcional)</label>
                     <input type="text" id="nota" name="nota" value="{{ old('nota') }}"
                            placeholder="Ej: promete pagar el viernes"
                            class="field-input">
                 </div>
 
-                <div class="mb-6 rounded-lg border border-slate-200 bg-slate-50 p-4">
-                    <h3 class="mb-3 text-sm font-semibold text-slate-800">
+                <div class="mb-6 rounded-lg border border-borde bg-elevado p-4">
+                    <h3 class="mb-3 text-sm font-semibold text-texto">
                         Datos del cliente
-                        <span class="font-normal text-slate-500">(para garantías y cobros)</span>
+                        <span class="font-normal text-tenue">— para garantías y cobros</span>
                     </h3>
 
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
                         <div>
                             <label for="cedula" class="field-label">Cédula</label>
-                            <input type="text" name="cedula" id="cedula"
-                                   value="{{ old('cedula') }}"
+                            <input type="text" id="cedula" name="cedula" value="{{ old('cedula') }}"
                                    class="field-input">
-                            <p id="avisoCliente" class="mt-1.5 hidden text-xs font-medium text-emerald-700">
+                            <p id="avisoCliente" class="mt-1 hidden text-xs font-medium text-brand">
                                 Cliente encontrado
                             </p>
                         </div>
                         <div>
                             <label for="nombre_cliente" class="field-label">Nombre</label>
-                            <input type="text" name="nombre_cliente" id="nombre_cliente"
-                                   value="{{ old('nombre_cliente') }}"
-                                   class="field-input">
+                            <input type="text" id="nombre_cliente" name="nombre_cliente"
+                                   value="{{ old('nombre_cliente') }}" class="field-input">
                         </div>
                         <div>
                             <label for="telefono" class="field-label">Teléfono</label>
-                            <input type="text" name="telefono" id="telefono"
-                                   value="{{ old('telefono') }}"
-                                   class="field-input">
+                            <input type="text" id="telefono" name="telefono"
+                                   value="{{ old('telefono') }}" class="field-input">
                         </div>
                     </div>
                 </div>
 
-                <h3 class="mb-2 text-sm font-semibold text-slate-800">Productos vendidos</h3>
+                <h3 class="mb-3 text-sm font-semibold text-texto">Productos vendidos</h3>
 
-                <div class="table-wrap mb-4">
-                    <table class="table-base">
-                        <thead>
-                            <tr>
-                                <th>Producto</th>
-                                <th class="w-24 text-center">Cant.</th>
-                                <th class="w-36 text-right">Precio</th>
-                                <th class="w-28 text-center">Garantía</th>
-                                <th class="w-32 text-right">Subtotal</th>
-                                <th class="w-16"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="cuerpoDetalles"></tbody>
-                        <tfoot>
-                            <tr class="border-t border-slate-200 bg-slate-50 font-semibold text-slate-700">
-                                <td colspan="4" class="px-4 py-2.5 text-right">Total</td>
-                                <td class="px-4 py-2.5 text-right" id="totalGeneral">$0</td>
-                                <td></td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                <div id="bloques" class="space-y-3"></div>
 
-                <button type="button" id="btnAgregar" class="btn-secondary btn-sm">
+                <button type="button" id="btnAgregar" class="btn-secondary btn-sm mt-3">
                     <x-icon name="plus" class="h-4 w-4" /> Agregar producto
                 </button>
 
-                <div class="mt-6 flex gap-3 border-t border-slate-100 pt-6">
-                    <button type="submit" class="btn-primary">
-                        Guardar venta
-                    </button>
-                    <a href="{{ route('ventas.index') }}" class="btn-secondary">
-                        Cancelar
-                    </a>
+                <div class="mt-6 flex items-center justify-between rounded-lg bg-elevado px-4 py-3">
+                    <span class="text-sm font-semibold text-suave">Total de la venta</span>
+                    <span class="font-display text-xl font-semibold text-texto" id="totalGeneral">$0</span>
+                </div>
+
+                <div class="mt-6 flex gap-3 border-t border-borde pt-6">
+                    <button type="submit" class="btn-primary">Guardar venta</button>
+                    <a href="{{ route('ventas.index') }}" class="btn-secondary">Cancelar</a>
                 </div>
             </form>
         </div>
@@ -147,23 +118,23 @@
                 'talla'  => $p->talla ?: 'Única',
                 'modelo' => $modelo,
                 'ref'    => $p->referencia,
-                'buscar' => trim($modelo . ' ' . $p->talla . ' ' . $p->referencia),
                 'precio' => (float) $p->precio_venta,
                 'stock'  => $p->stock,
             ];
         })->values();
 
-        $modelosJs = $productos->groupBy(fn($p) => $p->nombre . ($p->color ? ' — ' . $p->color : ''))
+        $modelosJs = $productos
+            ->groupBy(fn($p) => $p->nombre . ($p->color ? ' — ' . $p->color : ''))
             ->keys()->values();
     @endphp
 
-       <script>
-        document.addEventListener('DOMContentLoaded', function () {
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
 
         const PRODUCTOS = @json($productosJs);
         const MODELOS = @json($modelosJs);
-        let fila = 0;
-        const cuerpo = document.getElementById('cuerpoDetalles');
+        const cont = document.getElementById('bloques');
+        let n = 0;
 
         function opciones() {
             return PRODUCTOS.map(p =>
@@ -171,39 +142,50 @@
             ).join('');
         }
 
-        function agregarFila() {
-            const i = fila++;
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>
-                    <select name="detalles[${i}][producto_id]" class="w-full text-sm" required>
-                        <option value="">-- Seleccione --</option>
-                        ${opciones()}
-                    </select>
-                </td>
-                <td>
-                    <input type="number" name="detalles[${i}][cantidad]" min="1" value="1"
-                           class="field-input text-center cantidad" required>
-                    <p class="mt-1 hidden text-xs font-medium text-red-600 alertaStock">Sin stock</p>
-                </td>
-                <td>
-                    <input type="number" name="detalles[${i}][precio_venta]" min="0" step="1" value="0"
-                           class="field-input text-right" required>
-                </td>
-                <td>
-                    <input type="number" name="detalles[${i}][garantia_meses]" min="0" value="0"
-                           class="field-input text-center">
-                </td>
-                <td class="text-right subtotal font-medium text-slate-700">$0</td>
-                <td class="text-center">
-                    <button type="button" class="text-red-600 hover:text-red-700 btnQuitar" aria-label="Quitar producto">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4 inline"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+        function agregarBloque() {
+            const i = n++;
+            const div = document.createElement('div');
+            div.className = 'bloque rounded-lg border border-borde p-4';
+            div.innerHTML = `
+                <div class="mb-3 flex items-start gap-3">
+                    <div class="flex-1">
+                        <label class="field-label">Producto</label>
+                        <select name="detalles[${i}][producto_id]" class="w-full text-sm" required>
+                            <option value="">-- Buscar por nombre, talla o referencia --</option>
+                            ${opciones()}
+                        </select>
+                    </div>
+                    <button type="button" class="btnQuitar mt-7 text-tenue hover:text-alerta" aria-label="Quitar producto">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
-                </td>
-            `;
-            cuerpo.appendChild(tr);
+                </div>
 
-            const select = tr.querySelector('select');
+                <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    <div>
+                        <label class="field-label">Cantidad</label>
+                        <input type="number" name="detalles[${i}][cantidad]" min="1" value="1"
+                               class="cantidad field-input text-center" required>
+                        <p class="mt-1 hidden text-xs font-medium text-alerta alertaStock"></p>
+                    </div>
+                    <div>
+                        <label class="field-label">Precio</label>
+                        <input type="number" name="detalles[${i}][precio_venta]" min="0" step="1" value="0"
+                               class="field-input text-right" required>
+                    </div>
+                    <div>
+                        <label class="field-label">Garantía (meses)</label>
+                        <input type="number" name="detalles[${i}][garantia_meses]" min="0" value="0"
+                               class="field-input text-center">
+                    </div>
+                    <div>
+                        <label class="field-label">Subtotal</label>
+                        <p class="subtotal flex h-[38px] items-center justify-end font-display font-semibold text-texto">$0</p>
+                    </div>
+                </div>
+            `;
+            cont.appendChild(div);
+
+            const select = div.querySelector('select');
 
             new TomSelect(select, {
                 placeholder: 'Buscar por nombre, talla o referencia...',
@@ -214,27 +196,27 @@
                 lockOptgroupOrder: true,
                 render: {
                     optgroup_header: (data, escape) =>
-                        `<div class="px-3 py-1.5 text-xs font-semibold text-slate-500 bg-slate-50">${escape(data.label)}</div>`,
+                        `<div class="px-3 py-1.5 text-xs font-semibold opacity-70">${escape(data.label)}</div>`,
                 },
             });
 
             select.addEventListener('change', function () {
                 const producto = PRODUCTOS.find(p => p.id == this.value);
                 if (producto) {
-                    tr.querySelector('[name*="[precio_venta]"]').value = producto.precio;
-                    tr.dataset.stock = producto.stock;
+                    div.querySelector('[name*="[precio_venta]"]').value = producto.precio;
+                    div.dataset.stock = producto.stock;
                 }
-                validarStock(tr);
+                validarStock(div);
                 calcular();
             });
         }
 
-        function validarStock(tr) {
-            const stock = parseInt(tr.dataset.stock ?? 0);
-            const cant = parseInt(tr.querySelector('.cantidad').value) || 0;
-            const alerta = tr.querySelector('.alertaStock');
+        function validarStock(div) {
+            const stock = parseInt(div.dataset.stock ?? 0);
+            const cant = parseInt(div.querySelector('.cantidad').value) || 0;
+            const alerta = div.querySelector('.alertaStock');
 
-            if (tr.dataset.stock && cant > stock) {
+            if (div.dataset.stock && cant > stock) {
                 alerta.textContent = `Solo hay ${stock}`;
                 alerta.classList.remove('hidden');
             } else {
@@ -244,60 +226,48 @@
 
         function calcular() {
             let total = 0;
-            cuerpo.querySelectorAll('tr').forEach(tr => {
-                const cant = parseFloat(tr.querySelector('[name*="[cantidad]"]').value) || 0;
-                const prec = parseFloat(tr.querySelector('[name*="[precio_venta]"]').value) || 0;
-                const sub = cant * prec;
+            cont.querySelectorAll('.bloque').forEach(div => {
+                const c = parseFloat(div.querySelector('.cantidad').value) || 0;
+                const p = parseFloat(div.querySelector('[name*="[precio_venta]"]').value) || 0;
+                const sub = c * p;
                 total += sub;
-                tr.querySelector('.subtotal').textContent = '$' + sub.toLocaleString('es-CO');
+                div.querySelector('.subtotal').textContent = '$' + sub.toLocaleString('es-CO');
             });
             document.getElementById('totalGeneral').textContent = '$' + total.toLocaleString('es-CO');
         }
 
         document.getElementById('btnAgregar').addEventListener('click', () => {
-            agregarFila();
+            agregarBloque();
             calcular();
         });
 
-        cuerpo.addEventListener('input', e => {
+        cont.addEventListener('input', e => {
             if (e.target.classList.contains('cantidad')) {
-                validarStock(e.target.closest('tr'));
+                validarStock(e.target.closest('.bloque'));
             }
             calcular();
         });
 
-        cuerpo.addEventListener('click', e => {
+        cont.addEventListener('click', e => {
             if (e.target.closest('.btnQuitar')) {
-                e.target.closest('tr').remove();
+                e.target.closest('.bloque').remove();
                 calcular();
             }
         });
 
-        // Mostrar abono inicial solo en fiado y separado
+        // Abono inicial solo en fiado y separado
         const tipoPago = document.getElementById('tipo_pago');
         const cajaAbono = document.getElementById('cajaAbono');
         const inputCedula = document.getElementById('cedula');
 
-        const avisoCedula = document.createElement('p');
-        avisoCedula.className = 'mt-1.5 text-xs font-medium text-amber-700';
-        avisoCedula.textContent = 'Obligatorio para fiados y separados';
-
         function actualizarTipoPago() {
-            if (tipoPago.value === 'contado') {
-                cajaAbono.classList.add('hidden');
-                avisoCedula.remove();
-            } else {
-                cajaAbono.classList.remove('hidden');
-                inputCedula.parentElement.appendChild(avisoCedula);
-            }
+            cajaAbono.classList.toggle('hidden', tipoPago.value === 'contado');
         }
-
         tipoPago.addEventListener('change', actualizarTipoPago);
         actualizarTipoPago();
 
         // Autocompletar cliente por cédula
         let timer;
-
         inputCedula.addEventListener('input', function () {
             clearTimeout(timer);
             const valor = this.value.trim();
@@ -329,8 +299,7 @@
             btn.textContent = 'Guardando...';
         });
 
-        agregarFila();
-
+        agregarBloque();
     });
     </script>
 </x-app-layout>

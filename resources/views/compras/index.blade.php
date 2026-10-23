@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-lg font-semibold text-slate-800">Compras</h2>
+        <h2 class="text-lg font-semibold text-texto">Compras</h2>
     </x-slot>
 
     <div class="mx-auto max-w-6xl space-y-4 px-4 py-6 sm:px-6 lg:px-8">
@@ -14,8 +14,8 @@
         @endif
 
         <div class="flex items-center justify-between gap-4">
-            <p class="text-sm text-slate-500">
-                <span class="font-semibold text-slate-800">{{ $compras->total() }}</span>
+            <p class="text-sm text-tenue">
+                <span class="font-semibold text-texto">{{ $compras->total() }}</span>
                 {{ Str::plural('compra', $compras->total()) }} registradas
             </p>
             <a href="{{ route('compras.create') }}" class="btn-primary">
@@ -26,12 +26,12 @@
 
         @if ($compras->isEmpty())
             <div class="card flex flex-col items-center gap-3 px-4 py-14 text-center">
-                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-elevado text-tenue">
                     <x-icon name="truck" class="h-6 w-6" />
                 </span>
                 <div>
-                    <p class="font-medium text-slate-700">No hay compras registradas</p>
-                    <p class="mt-1 text-sm text-slate-500">Registra tu primera compra de mercancía.</p>
+                    <p class="font-medium text-suave">No hay compras registradas</p>
+                    <p class="mt-1 text-sm text-tenue">Registra tu primera compra de mercancía.</p>
                 </div>
                 <a href="{{ route('compras.create') }}" class="btn-primary">
                     <x-icon name="plus" class="h-4 w-4" /> Registrar compra
@@ -68,7 +68,7 @@
                                 <td class="text-right">${{ number_format($compra->total, 0) }}</td>
                                 <td class="text-right">
                                     <a href="{{ route('compras.show', $compra) }}"
-                                       class="inline-flex items-center gap-1 text-brand-600 hover:text-brand-700">
+                                       class="inline-flex items-center gap-1 text-brand hover:text-brand">
                                         <x-icon name="eye" class="h-4 w-4" /> Ver detalle
                                     </a>
                                 </td>

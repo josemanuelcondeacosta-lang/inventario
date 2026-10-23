@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="mb-6">
-        <h1 class="text-xl font-semibold text-slate-900">Iniciar sesión</h1>
-        <p class="mt-1 text-sm text-slate-500">Ingresa tus credenciales para acceder al panel.</p>
+        <h1 class="text-xl font-semibold text-texto">Iniciar sesión</h1>
+        <p class="mt-1 text-sm text-tenue">Ingresa tus credenciales para acceder al panel.</p>
     </div>
 
     <!-- Session Status -->
@@ -33,12 +33,12 @@
         <!-- Remember Me -->
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <label for="remember_me" class="inline-flex items-center gap-2">
-                <input id="remember_me" type="checkbox" class="rounded border-slate-300 text-brand-600 shadow-sm focus:ring-brand-500" name="remember">
-                <span class="text-sm text-slate-600">Recordarme</span>
+                <input id="remember_me" type="checkbox" class="rounded border-borde text-brand shadow-sm focus:ring-brand-500" name="remember">
+                <span class="text-sm text-suave">Recordarme</span>
             </label>
 
             @if (Route::has('password.request'))
-                <a class="text-sm font-medium text-brand-600 hover:text-brand-700" href="{{ route('password.request') }}">
+                <a class="text-sm font-medium text-brand hover:text-brand" href="{{ route('password.request') }}">
                     ¿Olvidaste tu contraseña?
                 </a>
             @endif

@@ -8,6 +8,7 @@ use App\Http\Controllers\VentaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ReclamoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -40,6 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::post('ventas/{venta}/abono', [VentaController::class, 'registrarAbono'])->name('ventas.abono');
     Route::post('ventas/{venta}/entregar', [VentaController::class, 'marcarEntregado'])->name('ventas.entregar');
     Route::post('ventas/{venta}/anular', [VentaController::class, 'anular'])->name('ventas.anular');
+    Route::get('ventas/{venta}/reclamo', [ReclamoController::class, 'create'])->name('reclamos.create');
+    Route::post('ventas/{venta}/reclamo', [ReclamoController::class, 'store'])->name('reclamos.store');
     Route::get('ventas/{venta}', [VentaController::class, 'show'])->name('ventas.show');
 
     Route::get('reportes', [ReporteController::class, 'index'])->name('reportes.index');
@@ -48,6 +51,9 @@ Route::middleware('auth')->group(function () {
     Route::get('clientes/{cliente}', [ClienteController::class, 'show'])->name('clientes.show');
     Route::get('clientes/{cliente}/edit', [ClienteController::class, 'edit'])->name('clientes.edit');
     Route::put('clientes/{cliente}', [ClienteController::class, 'update'])->name('clientes.update');
+
+    Route::get('reclamos', [ReclamoController::class, 'index'])->name('reclamos.index');
+    
 });
 
 require __DIR__.'/auth.php';

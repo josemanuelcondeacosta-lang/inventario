@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-lg font-semibold text-slate-800">Editar cliente</h2>
+        <h2 class="text-lg font-semibold text-texto">Editar cliente</h2>
     </x-slot>
 
     <div class="mx-auto max-w-lg space-y-4 px-4 py-6 sm:px-6 lg:px-8">

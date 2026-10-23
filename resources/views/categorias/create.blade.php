@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-lg font-semibold text-slate-800">Nueva categoría</h2>
+        <h2 class="text-lg font-semibold text-texto">Nueva categoría</h2>
     </x-slot>
 
     <div class="mx-auto max-w-lg px-4 py-6 sm:px-6 lg:px-8">
@@ -16,7 +16,7 @@
                     <p class="field-error">{{ $message }}</p>
                 @enderror
 
-                <div class="mt-6 flex gap-3 border-t border-slate-100 pt-6">
+                <div class="mt-6 flex gap-3 border-t border-borde pt-6">
                     <button type="submit" class="btn-primary">
                         Guardar categoría
                     </button>

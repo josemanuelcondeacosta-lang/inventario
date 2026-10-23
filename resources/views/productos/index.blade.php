@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-lg font-semibold text-slate-800">Productos</h2>
+        <h2 class="text-lg font-semibold text-texto">Productos</h2>
     </x-slot>
 
     <div class="mx-auto max-w-7xl space-y-4 px-4 py-6 sm:px-6 lg:px-8">
@@ -12,21 +12,21 @@
         <!-- Encabezado de la página -->
         <div class="flex flex-wrap items-center justify-between gap-4">
             <div>
-                <p class="text-sm text-slate-500">
-                    <span class="font-semibold text-slate-800">{{ $productos->total() }}</span>
+                <p class="text-sm text-tenue">
+                    <span class="font-semibold text-texto">{{ $productos->total() }}</span>
                     {{ Str::plural('producto', $productos->total()) }} registrados
                 </p>
             </div>
 
             <div class="flex flex-1 flex-wrap items-center justify-end gap-3 sm:flex-none">
                 <form method="GET" action="{{ route('productos.index') }}" class="relative flex-1 sm:flex-none">
-                    <x-icon name="magnifying-glass" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                    <x-icon name="magnifying-glass" class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-tenue" />
                     <input type="text" name="buscar" value="{{ request('buscar') }}"
                            placeholder="Buscar por nombre o referencia..."
                            class="field-input w-full py-2 pl-9 pr-3 sm:w-72">
                     @if (request('buscar'))
                         <a href="{{ route('productos.index') }}"
-                           class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                           class="absolute right-3 top-1/2 -translate-y-1/2 text-tenue hover:text-suave"
                            aria-label="Limpiar búsqueda">
                             <x-icon name="x-mark" class="h-4 w-4" />
                         </a>
@@ -43,14 +43,14 @@
         @if ($productos->isEmpty())
             <!-- Empty state -->
             <div class="card flex flex-col items-center gap-3 px-4 py-14 text-center">
-                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                <span class="flex h-12 w-12 items-center justify-center rounded-full bg-elevado text-tenue">
                     <x-icon name="inbox" class="h-6 w-6" />
                 </span>
                 <div>
-                    <p class="font-medium text-slate-700">
+                    <p class="font-medium text-suave">
                         {{ request('buscar') ? 'Sin resultados para tu búsqueda' : 'No hay productos registrados' }}
                     </p>
-                    <p class="mt-1 text-sm text-slate-500">
+                    <p class="mt-1 text-sm text-tenue">
                         {{ request('buscar') ? 'Prueba con otro nombre o referencia.' : 'Comienza agregando tu primer producto.' }}
                     </p>
                 </div>
@@ -78,10 +78,10 @@
                 <tbody>
                     @foreach ($productos as $producto)
                         <tr class="{{ $producto->activo ? '' : 'opacity-50' }}">
-                            <td class="font-medium text-slate-800">
+                            <td class="font-medium text-texto">
                                 {{ $producto->nombre }}
                                 @if ($producto->referencia)
-                                    <span class="block text-xs font-normal text-slate-400">{{ $producto->referencia }}</span>
+                                    <span class="block text-xs font-normal text-tenue">{{ $producto->referencia }}</span>
                                 @endif
                             </td>
                             <td>{{ $producto->categoria->nombre }}</td>
@@ -100,7 +100,7 @@
                             <td class="text-right whitespace-nowrap">
                                 <div class="flex items-center justify-end gap-3">
                                     <a href="{{ route('productos.edit', $producto) }}"
-                                       class="inline-flex items-center gap-1 text-brand-600 hover:text-brand-700"
+                                       class="inline-flex items-center gap-1 text-brand hover:text-brand"
                                        aria-label="Editar {{ $producto->nombre }}">
                                         <x-icon name="pencil" class="h-4 w-4" /> Editar
                                     </a>
@@ -112,7 +112,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                    class="inline-flex items-center gap-1 text-red-600 hover:text-red-700"
+                                                    class="inline-flex items-center gap-1 text-alerta hover:text-alerta"
                                                     aria-label="Desactivar {{ $producto->nombre }}">
                                                 <x-icon name="trash" class="h-4 w-4" /> Desactivar
                                             </button>

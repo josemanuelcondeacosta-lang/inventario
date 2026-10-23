@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-lg font-semibold text-slate-800">Registrar compra</h2>
+        <h2 class="text-lg font-semibold text-texto">Registrar compra</h2>
     </x-slot>
 
     <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
@@ -39,8 +39,8 @@
                     </div>
                 </div>
 
-                <h3 class="mb-1 text-sm font-semibold text-slate-800">Productos comprados</h3>
-                <p class="mb-4 text-xs text-slate-500">
+                <h3 class="mb-1 text-sm font-semibold text-texto">Productos comprados</h3>
+                <p class="mb-4 text-xs text-tenue">
                     Elija el producto y escriba cuántas unidades compró de cada talla. Deje en blanco las que no compró.
                 </p>
 
@@ -50,12 +50,12 @@
                     <x-icon name="plus" class="h-4 w-4" /> Agregar otro producto
                 </button>
 
-                <div class="mt-6 flex items-center justify-between rounded-lg bg-slate-50 px-4 py-3">
-                    <span class="text-sm font-semibold text-slate-700">Total de la compra</span>
-                    <span class="text-xl font-semibold text-slate-900" id="totalGeneral">$0</span>
+                <div class="mt-6 flex items-center justify-between rounded-lg bg-elevado px-4 py-3">
+                    <span class="text-sm font-semibold text-suave">Total de la compra</span>
+                    <span class="text-xl font-semibold text-texto" id="totalGeneral">$0</span>
                 </div>
 
-                <div class="mt-6 flex gap-3 border-t border-slate-100 pt-6">
+                <div class="mt-6 flex gap-3 border-t border-borde pt-6">
                     <button type="submit" class="btn-primary">Guardar compra</button>
                     <a href="{{ route('compras.index') }}" class="btn-secondary">Cancelar</a>
                 </div>
@@ -102,7 +102,7 @@
 
         function agregarBloque() {
             const div = document.createElement('div');
-            div.className = 'bloque rounded-lg border border-slate-200 p-4';
+            div.className = 'bloque rounded-lg border border-borde p-4';
             div.innerHTML = `
                 <div class="flex items-start gap-3">
                     <div class="flex-1">
@@ -111,14 +111,14 @@
                             ${opciones()}
                         </select>
                     </div>
-                    <button type="button" class="btnQuitar mt-1 text-slate-400 hover:text-red-600" aria-label="Quitar producto">
+                    <button type="button" class="btnQuitar mt-1 text-tenue hover:text-alerta" aria-label="Quitar producto">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
                 <div class="tallas mt-4 hidden"></div>
                 <div class="mt-3 hidden justify-end text-sm subtotalLinea">
-                    <span class="text-slate-500">Subtotal:&nbsp;</span>
-                    <span class="font-semibold text-slate-800 valorSub">$0</span>
+                    <span class="text-tenue">Subtotal:&nbsp;</span>
+                    <span class="font-semibold text-texto valorSub">$0</span>
                 </div>
             `;
             cont.appendChild(div);
@@ -150,17 +150,17 @@
                     ${grupo.items.map(it => {
                         const i = n++;
                         return `
-                        <div class="rounded-lg bg-slate-50 p-3">
+                        <div class="rounded-lg bg-elevado p-3">
                             <input type="hidden" name="detalles[${i}][producto_id]" value="${it.id}">
                             <div class="mb-2 flex items-baseline justify-between">
-                                <span class="text-sm font-semibold text-slate-800">${it.talla}</span>
-                                <span class="text-xs text-slate-400">hay ${it.stock}</span>
+                                <span class="text-sm font-semibold text-texto">${it.talla}</span>
+                                <span class="text-xs text-tenue">hay ${it.stock}</span>
                             </div>
-                            <label class="mb-1 block text-xs text-slate-500">Cantidad</label>
+                            <label class="mb-1 block text-xs text-tenue">Cantidad</label>
                             <input type="number" min="0" step="1" value="0"
                                    name="detalles[${i}][cantidad]"
                                    class="cant field-input mb-2 py-1.5 text-center text-sm">
-                            <label class="mb-1 block text-xs text-slate-500">Precio</label>
+                            <label class="mb-1 block text-xs text-tenue">Precio</label>
                             <input type="number" min="0" step="1" value="${it.precio}"
                                    name="detalles[${i}][precio_compra]"
                                    class="prec field-input py-1.5 text-right text-sm">

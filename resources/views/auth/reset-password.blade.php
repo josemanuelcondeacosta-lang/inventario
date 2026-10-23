@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="mb-6">
-        <h1 class="text-xl font-semibold text-slate-900">Restablecer contraseña</h1>
-        <p class="mt-1 text-sm text-slate-500">Crea una nueva contraseña para tu cuenta.</p>
+        <h1 class="text-xl font-semibold text-texto">Restablecer contraseña</h1>
+        <p class="mt-1 text-sm text-tenue">Crea una nueva contraseña para tu cuenta.</p>
     </div>
 
     <form method="POST" action="{{ route('password.store') }}" class="space-y-4">

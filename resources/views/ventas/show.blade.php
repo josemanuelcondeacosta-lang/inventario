@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-lg font-semibold text-slate-800">Detalle de venta</h2>
+        <h2 class="text-lg font-semibold text-texto">Detalle de venta</h2>
     </x-slot>
 
     <div class="mx-auto max-w-4xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
@@ -27,39 +27,39 @@
 
             <div class="mb-6 grid grid-cols-2 gap-4 text-sm md:grid-cols-4">
                 <div>
-                    <span class="text-slate-500">Fecha</span>
-                    <p class="font-medium text-slate-800">{{ $venta->fecha->format('d/m/Y') }}</p>
+                    <span class="text-tenue">Fecha</span>
+                    <p class="font-medium text-texto">{{ $venta->fecha->format('d/m/Y') }}</p>
                 </div>
                 <div>
-                    <span class="text-slate-500">Cliente</span>
-                    <p class="font-medium text-slate-800">{{ $venta->cliente->nombre ?? 'Sin datos' }}</p>
+                    <span class="text-tenue">Cliente</span>
+                    <p class="font-medium text-texto">{{ $venta->cliente->nombre ?? 'Sin datos' }}</p>
                 </div>
                 <div>
-                    <span class="text-slate-500">Cédula</span>
-                    <p class="font-medium text-slate-800">{{ $venta->cliente->cedula ?? '-' }}</p>
+                    <span class="text-tenue">Cédula</span>
+                    <p class="font-medium text-texto">{{ $venta->cliente->cedula ?? '-' }}</p>
                 </div>
                 <div>
-                    <span class="text-slate-500">Teléfono</span>
-                    <p class="font-medium text-slate-800">{{ $venta->cliente->telefono ?? '-' }}</p>
+                    <span class="text-tenue">Teléfono</span>
+                    <p class="font-medium text-texto">{{ $venta->cliente->telefono ?? '-' }}</p>
                 </div>
             </div>
 
-            <div class="mb-6 grid grid-cols-2 gap-4 border-t border-slate-100 pt-4 text-sm md:grid-cols-4">
+            <div class="mb-6 grid grid-cols-2 gap-4 border-t border-borde pt-4 text-sm md:grid-cols-4">
                 <div>
-                    <span class="text-slate-500">Tipo</span>
-                    <p class="font-medium capitalize text-slate-800">{{ $venta->tipo_pago }}</p>
+                    <span class="text-tenue">Tipo</span>
+                    <p class="font-medium capitalize text-texto">{{ $venta->tipo_pago }}</p>
                 </div>
                 <div>
-                    <span class="text-slate-500">Método</span>
-                    <p class="font-medium capitalize text-slate-800">{{ $venta->metodo_pago }}</p>
+                    <span class="text-tenue">Método</span>
+                    <p class="font-medium capitalize text-texto">{{ $venta->metodo_pago }}</p>
                 </div>
                 <div>
-                    <span class="text-slate-500">Abonado</span>
-                    <p class="font-medium text-emerald-700">${{ number_format($venta->abonado, 0) }}</p>
+                    <span class="text-tenue">Abonado</span>
+                    <p class="font-medium text-brand">${{ number_format($venta->abonado, 0) }}</p>
                 </div>
                 <div>
-                    <span class="text-slate-500">Saldo</span>
-                    <p class="font-medium {{ $venta->saldo > 0 ? 'text-red-700' : 'text-slate-400' }}">
+                    <span class="text-tenue">Saldo</span>
+                    <p class="font-medium {{ $venta->saldo > 0 ? 'text-alerta' : 'text-tenue' }}">
                         ${{ number_format($venta->saldo, 0) }}
                     </p>
                 </div>
@@ -87,7 +87,7 @@
                             <tr>
                                 <td>
                                     {{ $detalle->producto->nombre }}
-                                    <span class="text-slate-400">
+                                    <span class="text-tenue">
                                         {{ $detalle->producto->talla }} {{ $detalle->producto->color }}
                                     </span>
                                 </td>
@@ -103,7 +103,7 @@
                                             {{ $vigente ? 'Vigente hasta' : 'Venció' }} {{ $vence->format('d/m/Y') }}
                                         </x-badge>
                                     @else
-                                        <span class="text-slate-400">-</span>
+                                        <span class="text-tenue">-</span>
                                     @endif
                                 </td>
                                 <td class="text-right">${{ number_format($detalle->subtotal, 0) }}</td>
@@ -111,7 +111,7 @@
                         @endforeach
                     </tbody>
                     <tfoot>
-                        <tr class="border-t border-slate-200 bg-slate-50 font-semibold text-slate-700">
+                        <tr class="border-t border-borde bg-elevado font-semibold text-suave">
                             <td colspan="4" class="px-4 py-2.5 text-right">Total</td>
                             <td class="px-4 py-2.5 text-right">${{ number_format($venta->total, 0) }}</td>
                         </tr>
@@ -122,9 +122,9 @@
 
         @if ($venta->saldo > 0 && !$venta->anulada)
             <div class="card card-body border-l-4 border-l-red-500">
-                <h3 class="font-semibold text-slate-800">Registrar abono</h3>
-                <p class="mb-4 text-sm text-slate-500">
-                    Saldo pendiente: <strong class="text-red-700">${{ number_format($venta->saldo, 0) }}</strong>
+                <h3 class="font-semibold text-texto">Registrar abono</h3>
+                <p class="mb-4 text-sm text-tenue">
+                    Saldo pendiente: <strong class="text-alerta">${{ number_format($venta->saldo, 0) }}</strong>
                 </p>
 
                 <form action="{{ route('ventas.abono', $venta) }}" method="POST">
@@ -164,13 +164,13 @@
 
         @if (!$venta->entregado && !$venta->anulada)
             <div class="card card-body border-l-4 border-l-amber-500">
-                <h3 class="font-semibold text-slate-800">Producto separado</h3>
+                <h3 class="font-semibold text-texto">Producto separado</h3>
                 @if ($venta->saldo > 0)
-                    <p class="mt-1 text-sm text-slate-600">
+                    <p class="mt-1 text-sm text-suave">
                         Se podrá entregar cuando termine de pagar.
                     </p>
                 @else
-                    <p class="mb-3 mt-1 text-sm text-slate-600">
+                    <p class="mb-3 mt-1 text-sm text-suave">
                         Ya está totalmente pagado. Puede entregarse.
                     </p>
                     <form action="{{ route('ventas.entregar', $venta) }}" method="POST"
@@ -204,13 +204,13 @@
                                 <tr>
                                     <td>{{ $abono->fecha->format('d/m/Y') }}</td>
                                     <td class="capitalize">{{ $abono->metodo_pago }}</td>
-                                    <td class="text-slate-400">{{ $abono->nota ?? '-' }}</td>
+                                    <td class="text-tenue">{{ $abono->nota ?? '-' }}</td>
                                     <td class="text-right">${{ number_format($abono->monto, 0) }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
                         <tfoot>
-                            <tr class="border-t border-slate-200 bg-slate-50 font-semibold text-slate-700">
+                            <tr class="border-t border-borde bg-elevado font-semibold text-suave">
                                 <td colspan="3" class="px-4 py-2.5 text-right">Total abonado</td>
                                 <td class="px-4 py-2.5 text-right">${{ number_format($venta->abonado, 0) }}</td>
                             </tr>
@@ -227,9 +227,9 @@
             <div class="card-body space-y-5">
                 @foreach ($venta->detalles as $detalle)
                     <div>
-                        <p class="text-sm font-medium text-slate-800">
+                        <p class="text-sm font-medium text-texto">
                             {{ $detalle->producto->nombre }}
-                            <span class="font-normal text-slate-400">
+                            <span class="font-normal text-tenue">
                                 {{ $detalle->producto->talla }} {{ $detalle->producto->color }}
                             </span>
                         </p>
@@ -239,7 +239,7 @@
                         @endphp
 
                         @if ($compras->count())
-                            <div class="mt-2 overflow-x-auto rounded-lg border border-slate-100">
+                            <div class="mt-2 overflow-x-auto rounded-lg border border-borde">
                                 <table class="table-base">
                                     <thead>
                                         <tr>
@@ -262,7 +262,7 @@
                                 </table>
                             </div>
                         @else
-                            <p class="mt-1 text-xs text-slate-500">Sin compras registradas para este producto.</p>
+                            <p class="mt-1 text-xs text-tenue">Sin compras registradas para este producto.</p>
                         @endif
                     </div>
                 @endforeach
@@ -271,8 +271,8 @@
 
                 @if ($venta->anulada)
             <div class="card card-body border-l-4 border-l-slate-500">
-                <h3 class="font-semibold text-slate-800">Venta anulada</h3>
-                <p class="mt-1 text-sm text-slate-600">
+                <h3 class="font-semibold text-texto">Venta anulada</h3>
+                <p class="mt-1 text-sm text-suave">
                     Fecha: {{ $venta->anulada_at->format('d/m/Y H:i') }}<br>
                     Motivo: {{ $venta->motivo_anulacion }}
                 </p>
@@ -280,12 +280,12 @@
         @else
             <div class="card card-body">
                 <details>
-                    <summary class="cursor-pointer text-sm text-red-600 hover:underline">
+                    <summary class="cursor-pointer text-sm text-alerta hover:underline">
                         Anular esta venta
                     </summary>
 
-                    <div class="mt-3 rounded-lg bg-red-50 p-4">
-                        <p class="mb-3 text-sm text-slate-700">
+                    <div class="mt-3 rounded-lg bg-alerta-suave p-4">
+                        <p class="mb-3 text-sm text-suave">
                             Al anular, los productos volverán al inventario y el saldo pendiente se cancelará.
                             La venta quedará registrada como anulada.
                         </p>
@@ -307,10 +307,15 @@
             </div>
         @endif
 
-        <div>
+        <div class="flex gap-3">
             <a href="{{ route('ventas.index') }}" class="btn-secondary">
                 <x-icon name="chevron-left" class="h-4 w-4" /> Volver
             </a>
+            @if (!$venta->anulada)
+                <a href="{{ route('reclamos.create', $venta) }}" class="btn-secondary">
+                    Registrar reclamo de garantía
+                </a>
+            @endif
         </div>
     </div>
 </x-app-layout>

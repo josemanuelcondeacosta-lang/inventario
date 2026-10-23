@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-lg font-semibold text-slate-800">Editar producto</h2>
+        <h2 class="text-lg font-semibold text-texto">Editar producto</h2>
     </x-slot>
 
     <div class="mx-auto max-w-3xl px-4 py-6 sm:px-6 lg:px-8">
@@ -10,7 +10,7 @@
                 @method('PUT')
                 @include('productos._form')
 
-                <div class="mt-6 flex gap-3 border-t border-slate-100 pt-6">
+                <div class="mt-6 flex gap-3 border-t border-borde pt-6">
                     <button type="submit" class="btn-primary">
                         Actualizar producto
                     </button>

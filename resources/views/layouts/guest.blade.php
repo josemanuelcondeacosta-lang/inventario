@@ -14,7 +14,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-slate-900 antialiased">
+    <body class="font-sans text-texto antialiased">
         <div class="grid min-h-screen lg:grid-cols-2">
 
             <!-- Panel de marca (solo escritorio) -->
@@ -32,25 +32,25 @@
                     <h1 class="text-3xl font-semibold leading-tight">
                         Gestiona tu inventario con claridad.
                     </h1>
-                    <p class="mt-4 text-sm text-slate-300">
+                    <p class="mt-4 text-sm text-tenue">
                         Controla productos, ventas, compras y reportes desde un solo lugar,
                         con una vista clara del estado de tu negocio.
                     </p>
                 </div>
 
-                <p class="relative text-xs text-slate-500">
+                <p class="relative text-xs text-tenue">
                     &copy; {{ date('Y') }} {{ config('app.name', 'Inventario') }}. Todos los derechos reservados.
                 </p>
             </div>
 
             <!-- Panel del formulario -->
-            <div class="flex flex-col items-center justify-center bg-slate-50 px-6 py-12 sm:px-10">
+            <div class="flex flex-col items-center justify-center bg-elevado px-6 py-12 sm:px-10">
                 <div class="w-full max-w-sm">
                     <div class="mb-8 flex flex-col items-center gap-3 lg:hidden">
                         <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-600 shadow-soft">
                             <x-application-logo class="h-7 w-7 fill-current text-white" />
                         </div>
-                        <span class="text-base font-semibold text-slate-800">{{ config('app.name', 'Inventario') }}</span>
+                        <span class="text-base font-semibold text-texto">{{ config('app.name', 'Inventario') }}</span>
                     </div>
 
                     <div class="card p-6 sm:p-8">

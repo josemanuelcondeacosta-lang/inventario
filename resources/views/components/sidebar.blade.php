@@ -4,7 +4,7 @@
          el recuadro punteado por:
          <img src="{{ asset('img/logo.png') }}" alt="" class="h-11 w-auto"> --}}
     <div class="flex h-20 shrink-0 items-center gap-3 border-b border-white/[0.06] px-5">
-        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-dashed border-brand-400/40 text-[9px] font-medium text-brand-400/60">
+        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-dashed border-brand-400/40 text-[9px] font-medium text-brand/60">
             LOGO
         </div>
         <div class="min-w-0 leading-tight">
@@ -44,6 +44,10 @@
             Clientes
         </x-sidebar-link>
 
+        <x-sidebar-link :href="route('reclamos.index')" :active="request()->routeIs('reclamos.*')" icon="exclamation-triangle">
+            Garantías
+        </x-sidebar-link>
+
         <p class="px-3 pb-1.5 pt-5 text-[11px] font-semibold tracking-wide text-nav-texto">Análisis</p>
 
         <x-sidebar-link :href="route('reportes.index')" :active="request()->routeIs('reportes.*')" icon="chart-bar">
@@ -53,7 +57,7 @@
 
     <div class="shrink-0 border-t border-white/[0.06] p-3">
         <div class="flex items-center gap-3 rounded-lg px-2 py-2">
-            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-400/15 text-brand-400">
+            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand/15 text-brand">
                 <x-icon name="user-circle" class="h-6 w-6" />
             </div>
             <div class="min-w-0 flex-1">

@@ -51,7 +51,7 @@
                          x-transition:leave-start="translate-x-0" x-transition:leave-end="-translate-x-full"
                          class="relative flex w-full flex-col">
                         <button type="button" @click="sidebarOpen = false"
-                                class="absolute -right-11 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white"
+                                class="absolute -right-11 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-superficie/10 text-texto"
                                 aria-label="Cerrar menú">
                             <x-icon name="x-mark" class="h-5 w-5" />
                         </button>
