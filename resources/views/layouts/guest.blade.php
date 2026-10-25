@@ -5,52 +5,58 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Inventario') }}</title>
+        <title>Yoyi Sport</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700|space-grotesk:500,600,700&display=swap" rel="stylesheet" />
+        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <script>
+            (function () {
+                const t = localStorage.getItem('tema');
+                if (t === 'oscuro' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                }
+            })();
+        </script>
     </head>
     <body class="font-sans text-texto antialiased">
         <div class="grid min-h-screen lg:grid-cols-2">
 
             <!-- Panel de marca (solo escritorio) -->
-            <div class="relative hidden flex-col justify-between overflow-hidden bg-slate-900 p-12 text-white lg:flex">
-                <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,theme(colors.brand.600)/35,transparent_45%),radial-gradient(circle_at_80%_70%,theme(colors.brand.500)/25,transparent_40%)]"></div>
+            <div class="relative hidden flex-col justify-between overflow-hidden bg-nav-fondo p-12 text-white lg:flex">
+                <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(198,242,78,0.16),transparent_40%),radial-gradient(circle_at_85%_85%,rgba(198,242,78,0.08),transparent_45%)]"></div>
 
-                <div class="relative flex items-center gap-2.5">
-                    <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-600 shadow-soft">
-                        <x-application-logo class="h-5 w-5 fill-current text-white" />
-                    </div>
-                    <span class="text-sm font-semibold">{{ config('app.name', 'Inventario') }}</span>
-                </div>
+                <p class="relative font-display text-xl font-semibold">Yoyi Sport</p>
 
-                <div class="relative max-w-md">
-                    <h1 class="text-3xl font-semibold leading-tight">
-                        Gestiona tu inventario con claridad.
+                <div class="relative flex flex-col items-start">
+                    <img src="{{ asset('images/yoyi-sport-logo.webp') }}" alt="Yoyi Sport"
+                         class="h-48 w-48 rounded-full shadow-2xl ring-4 ring-white/10">
+                    <h1 class="mt-10 max-w-md text-4xl font-semibold leading-tight text-white">
+                        Tu tienda deportiva, <span class="text-[#C6F24E]">bajo control.</span>
                     </h1>
-                    <p class="mt-4 text-sm text-tenue">
-                        Controla productos, ventas, compras y reportes desde un solo lugar,
-                        con una vista clara del estado de tu negocio.
+                    <p class="mt-4 max-w-md text-sm text-nav-texto">
+                        Productos, ventas, compras, clientes, garantías y reportes de Yoyi Sport en un solo lugar.
                     </p>
                 </div>
 
-                <p class="relative text-xs text-tenue">
-                    &copy; {{ date('Y') }} {{ config('app.name', 'Inventario') }}. Todos los derechos reservados.
-                </p>
+                <div class="relative flex items-center justify-between text-xs text-nav-texto">
+                    <span>&copy; {{ date('Y') }} Yoyi Sport &middot; Dios Es Amor</span>
+                    <span class="rounded-full bg-white/10 px-3 py-1 font-semibold text-white">Cel. 301 742 6254</span>
+                </div>
             </div>
 
             <!-- Panel del formulario -->
             <div class="flex flex-col items-center justify-center bg-elevado px-6 py-12 sm:px-10">
                 <div class="w-full max-w-sm">
                     <div class="mb-8 flex flex-col items-center gap-3 lg:hidden">
-                        <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-brand-600 shadow-soft">
-                            <x-application-logo class="h-7 w-7 fill-current text-white" />
-                        </div>
-                        <span class="text-base font-semibold text-texto">{{ config('app.name', 'Inventario') }}</span>
+                        <img src="{{ asset('images/yoyi-sport-logo-256.png') }}" alt="Yoyi Sport"
+                             class="h-20 w-20 rounded-full shadow-card">
+                        <span class="font-display text-lg font-semibold text-texto">Yoyi Sport</span>
                     </div>
 
                     <div class="card p-6 sm:p-8">

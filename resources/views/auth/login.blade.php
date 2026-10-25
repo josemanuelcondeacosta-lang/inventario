@@ -33,7 +33,7 @@
         <!-- Remember Me -->
         <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <label for="remember_me" class="inline-flex items-center gap-2">
-                <input id="remember_me" type="checkbox" class="rounded border-borde text-brand shadow-sm focus:ring-brand-500" name="remember">
+                <input id="remember_me" type="checkbox" class="rounded border-borde text-brand shadow-sm focus:ring-brand" name="remember">
                 <span class="text-sm text-suave">Recordarme</span>
             </label>
 

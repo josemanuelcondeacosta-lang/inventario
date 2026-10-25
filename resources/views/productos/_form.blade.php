@@ -63,7 +63,7 @@
                         <input type="checkbox" name="tallas[]" value="{{ $t }}"
                                class="peer sr-only"
                                {{ in_array($t, $tallasViejas) ? 'checked' : '' }}>
-                        <span class="inline-flex min-w-[3.2rem] items-center justify-center rounded-lg border border-borde bg-superficie px-3 py-2 text-sm font-medium text-suave transition-colors hover:border-slate-400 peer-checked:border-brand-600 peer-checked:bg-brand-600 peer-checked:text-texto">
+                        <span class="inline-flex min-w-[3.2rem] items-center justify-center rounded-lg border border-borde bg-superficie px-3 py-2 text-sm font-medium text-suave transition-colors hover:border-slate-400 peer-checked:border-brand peer-checked:bg-brand peer-checked:text-white dark:peer-checked:text-fondo">
                             {{ $t }}
                         </span>
                     </label>

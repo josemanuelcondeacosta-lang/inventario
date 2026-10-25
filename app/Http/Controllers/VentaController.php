@@ -20,8 +20,8 @@ class VentaController extends Controller
             ->withCount('detalles')
             ->when($request->buscar, function ($q) use ($request) {
                 $q->whereHas('cliente', function ($c) use ($request) {
-                    $c->where('cedula', 'like', '%' . $request->buscar . '%')
-                    ->orWhere('nombre', 'like', '%' . $request->buscar . '%');
+                    $c->whereLike('cedula', '%' . $request->buscar . '%')
+                    ->orWhereLike('nombre', '%' . $request->buscar . '%');
                 });
             })
             ->when($request->estado === 'pendientes', fn($q) => $q->where('saldo', '>', 0))

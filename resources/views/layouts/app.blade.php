@@ -5,11 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ $title ?? config('app.name', 'Inventario') }}</title>
+        <title>{{ $title ?? 'Yoyi Sport' }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700|space-grotesk:500,600,700&display=swap" rel="stylesheet" />
+        <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -22,11 +23,9 @@
                 }
             })();
         </script>
-
-    </head>
     </head>
     <body class="font-sans antialiased">
-                        <div x-data="{ sidebarOpen: false }" class="min-h-screen bg-fondo">
+        <div x-data="{ sidebarOpen: false }" class="min-h-screen bg-fondo">
 
             <!-- Sidebar: escritorio -->
             <aside class="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-40 lg:flex lg:w-72 lg:flex-col">

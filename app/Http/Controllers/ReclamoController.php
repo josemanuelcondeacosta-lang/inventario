@@ -17,8 +17,8 @@ class ReclamoController extends Controller
         $reclamos = Reclamo::with(['venta.cliente', 'detalle.producto', 'productoEntregado'])
             ->when($request->buscar, function ($q) use ($request) {
                 $q->whereHas('venta.cliente', function ($c) use ($request) {
-                    $c->where('cedula', 'like', '%' . $request->buscar . '%')
-                      ->orWhere('nombre', 'like', '%' . $request->buscar . '%');
+                    $c->whereLike('cedula', '%' . $request->buscar . '%')
+                      ->orWhereLike('nombre', '%' . $request->buscar . '%');
                 });
             })
             ->orderByDesc('fecha')

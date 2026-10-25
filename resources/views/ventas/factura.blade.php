@@ -28,9 +28,11 @@
     </div>
 
     <div class="centro">
-        <h1>NOMBRE DE LA TIENDA</h1>
+        <img src="{{ asset('images/yoyi-sport-logo-256.png') }}" alt="Yoyi Sport" width="80" height="80">
+        <h1>YOYI SPORT</h1>
+        <div><em>Dios Es Amor</em></div>
         <div>NIT / Cédula: 000000000</div>
-        <div>Barranquilla — Tel. 000 000 0000</div>
+        <div>Barranquilla — Cel. 301 742 6254</div>
     </div>
 
     <div class="linea"></div>

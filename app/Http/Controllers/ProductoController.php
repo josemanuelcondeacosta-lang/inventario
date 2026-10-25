@@ -12,8 +12,8 @@ class ProductoController extends Controller
     {
         $productos = Producto::with('categoria')
             ->when($request->buscar, function ($q) use ($request) {
-                $q->where('nombre', 'like', '%' . $request->buscar . '%')
-                  ->orWhere('referencia', 'like', '%' . $request->buscar . '%');
+                $q->whereLike('nombre', '%' . $request->buscar . '%')
+                  ->orWhereLike('referencia', '%' . $request->buscar . '%');
             })
             ->orderBy('nombre')
             ->paginate(15)

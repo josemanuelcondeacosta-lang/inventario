@@ -1,19 +1,13 @@
 <div class="flex h-full flex-col bg-nav-fondo">
 
-    {{-- Logo: cuando lo tengas, ponlo en public/img/logo.png y reemplaza
-         el recuadro punteado por:
-         <img src="{{ asset('img/logo.png') }}" alt="" class="h-11 w-auto"> --}}
-    <div class="flex h-20 shrink-0 items-center gap-3 border-b border-white/[0.06] px-5">
-        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-dashed border-brand-400/40 text-[9px] font-medium text-brand/60">
-            LOGO
-        </div>
+    <a href="{{ route('dashboard') }}" class="flex h-20 shrink-0 items-center gap-3 border-b border-white/[0.06] px-5">
+        <img src="{{ asset('images/yoyi-sport-logo-256.png') }}" alt="Yoyi Sport"
+             class="h-11 w-11 shrink-0 rounded-full ring-2 ring-white/10">
         <div class="min-w-0 leading-tight">
-            <p class="truncate font-display text-base font-semibold text-white">
-                {{ config('app.name', 'Inventario') }}
-            </p>
-            <p class="text-xs text-nav-texto">Inventario y ventas</p>
+            <p class="truncate font-display text-base font-semibold text-white">Yoyi Sport</p>
+            <p class="text-xs text-nav-texto">Dios Es Amor</p>
         </div>
-    </div>
+    </a>
 
     <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-5">
         <x-sidebar-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" icon="home">

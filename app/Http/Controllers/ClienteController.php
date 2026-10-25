@@ -13,9 +13,9 @@ class ClienteController extends Controller
             ->withSum(['ventas' => fn($q) => $q->where('anulada', false)], 'total')
             ->withSum(['ventas' => fn($q) => $q->where('anulada', false)], 'saldo')
             ->when($request->buscar, function ($q) use ($request) {
-                $q->where('cedula', 'like', '%' . $request->buscar . '%')
-                  ->orWhere('nombre', 'like', '%' . $request->buscar . '%')
-                  ->orWhere('telefono', 'like', '%' . $request->buscar . '%');
+                $q->whereLike('cedula', '%' . $request->buscar . '%')
+                  ->orWhereLike('nombre', '%' . $request->buscar . '%')
+                  ->orWhereLike('telefono', '%' . $request->buscar . '%');
             })
             ->orderBy('nombre')
             ->paginate(15)
