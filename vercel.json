@@ -7,7 +7,7 @@
     "routes": [
         { "src": "/build/(.*)", "dest": "/public/build/$1" },
         { "src": "/images/(.*)", "dest": "/public/images/$1" },
-        { "src": "/(favicon\.ico|favicon\.png|robots\.txt)", "dest": "/public/$1" },
+        { "src": "/(favicon.ico|favicon.png|robots.txt)", "dest": "/public/$1" },
         { "src": "/(.*)", "dest": "/api/index.php" }
     ],
     "env": {
