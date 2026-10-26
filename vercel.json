@@ -1,13 +1,15 @@
 {
     "version": 2,
     "framework": null,
+    "installCommand": "echo sin-npm-install",
+    "buildCommand": "echo assets-ya-compilados-en-public-build",
+    "outputDirectory": "public",
     "functions": {
         "api/index.php": { "runtime": "vercel-php@0.7.4" }
     },
     "routes": [
-        { "src": "/build/(.*)", "dest": "/public/build/$1" },
-        { "src": "/images/(.*)", "dest": "/public/images/$1" },
-        { "src": "/(favicon.ico|favicon.png|robots.txt)", "dest": "/public/$1" },
+        { "src": "/index.php", "dest": "/api/index.php" },
+        { "handle": "filesystem" },
         { "src": "/(.*)", "dest": "/api/index.php" }
     ],
     "env": {
